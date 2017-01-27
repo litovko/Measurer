@@ -10,6 +10,7 @@ class c_com : public QObject
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)
+    //Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)
 public:
     explicit c_com(QObject *parent = 0);
     virtual ~c_com();
@@ -38,6 +39,7 @@ private:
     QSerialPort::Parity m_parity=QSerialPort::NoParity;
     QSerialPort::StopBits m_stopBits=QSerialPort::OneStop;
     QSerialPort::FlowControl m_flowControl=QSerialPort::NoFlowControl;
+    QSerialPort::SerialPortError m_error=QSerialPort::NoError;
     QString m_data;
 
 };

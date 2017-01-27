@@ -4,6 +4,8 @@ c_com::c_com(QObject *parent) : QObject(parent)
 {
     m_serial = new QSerialPort(this);
     connect(m_serial, SIGNAL(readyRead()), this, SLOT(readData()));
+    connect(serialPort, static_cast<void(QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+          [=](QSerialPort::SerialPortError error){ /* ... */ });
 }
 
 c_com::~c_com()
@@ -35,7 +37,22 @@ void c_com::openSerialPort()
 
 void c_com::readData()
 {
-   setData(m_serial->readAll());
+    setData(m_serial->readAll());
+}
+
+void c_com::readError()
+{
+
+}
+
+QSerialPort::SerialPortError c_com::error() const
+{
+    return m_error;
+}
+
+void c_com::setError(const QSerialPort::SerialPortError &error)
+{
+    m_error = error;
 }
 
 QString c_com::data() const
