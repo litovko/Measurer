@@ -15,6 +15,6 @@ ApplicationWindow {
     }
     Text {
         id: txt
-        text: qsTr(m.name+" "+m.data)
+        text: qsTr(m.name+" \r\n"+m.data+"\n\r  e="+m.error)
     }
 }

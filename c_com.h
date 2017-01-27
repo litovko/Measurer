@@ -10,7 +10,7 @@ class c_com : public QObject
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)
-    //Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)
+    Q_PROPERTY(QSerialPort::SerialPortError error READ error WRITE setError NOTIFY errorChanged)
 public:
     explicit c_com(QObject *parent = 0);
     virtual ~c_com();
@@ -22,14 +22,19 @@ public:
     void setData(const QString &data);
 
 
+    QSerialPort::SerialPortError error() const;
+    void setError(const QSerialPort::SerialPortError &error);
+
 signals:
     void nameChanged();
     void dataChanged();
+    void errorChanged();
 
 
 public slots:
     Q_INVOKABLE void openSerialPort();
     void readData();
+    void readError();
 
 private:
     QSerialPort *m_serial;

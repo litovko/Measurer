@@ -4,7 +4,7 @@ c_com::c_com(QObject *parent) : QObject(parent)
 {
     m_serial = new QSerialPort(this);
     connect(m_serial, SIGNAL(readyRead()), this, SLOT(readData()));
-    connect(serialPort, static_cast<void(QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+    connect(m_serial, static_cast<void(QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
           [=](QSerialPort::SerialPortError error){ /* ... */ });
 }
 
