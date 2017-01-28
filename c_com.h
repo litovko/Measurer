@@ -12,6 +12,8 @@ class c_com : public QObject
     Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)
     Q_PROPERTY(QSerialPort::SerialPortError error READ error WRITE setError NOTIFY errorChanged)
     Q_PROPERTY(QStringList ports READ ports NOTIFY portsChanged)
+    //=============================
+    Q_PROPERTY(qreal weight READ weight NOTIFY weightChanged)
 public:
     explicit c_com(QObject *parent = 0);
     virtual ~c_com();
@@ -29,16 +31,32 @@ public:
     QStringList ports() const;
 
 
+    qint32 tare() const;
+    void setTare(const qint32 &tare);
+
+    qreal weight() const;
+
+    void setWeight(const qreal &weight);
+
+    qreal devider() const;
+    void setDevider(const qreal &devider);
+
 signals:
     void nameChanged();
     void dataChanged();
     void errorChanged();
     void portsChanged();
 
+    //====================
+    void weightChanged();
+
 
 public slots:
     Q_INVOKABLE void openSerialPort(int port);
     Q_INVOKABLE void listPorts();
+    Q_INVOKABLE void tare(int count); //find zero in count number measures
+    Q_INVOKABLE void calibrate(qreal cur_weight);
+    Q_INVOKABLE void reset();
     void readData();
     void readError();
 
@@ -54,6 +72,14 @@ private:
     QSerialPort::SerialPortError m_error=QSerialPort::NoError;
     QString m_data;
     QStringList m_ports;
+
+    //===============================
+    qint32 m_tare=0;
+    qreal m_devider=1;
+    qreal m_weight;
+    qint32 m_count=0;
+    qint32 m_tarecount=0;
+    qint64 m_taresum=0;
 
 };
 

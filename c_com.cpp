@@ -56,9 +56,47 @@ void c_com::listPorts()
     emit portsChanged();
 }
 
+void c_com::tare(int count)  //запуск процедуры тарирования
+{
+    m_tarecount=count; //количество подсчетов для тарирования
+    m_count=1; //начинаем считать сумму по весу с единицы
+    m_taresum=0;
+}
+
+void c_com::calibrate(qreal cur_weight)
+{
+    m_devider=m_weight/cur_weight;
+}
+
+void c_com::reset()
+{
+    m_devider=1;
+    m_weight=0;
+    m_count=0;
+    m_tarecount=0;
+    m_taresum=0;
+    m_tare=0;
+
+}
+
 void c_com::readData()
 {
+    bool ok;
     setData(m_serial->readAll());
+    int w=m_data.toInt(&ok,10); if(!ok) return;
+    setWeight((w-m_tare)/m_devider);
+    if (m_tarecount==0) return;
+    if (m_count>0&&m_count<=m_tarecount) {
+        m_taresum=m_taresum+w;
+        qDebug()<<"c:"<<m_count<<"tare:"<<m_taresum;
+        m_count++;
+
+    }
+    if (m_count-1==m_tarecount) {
+        m_tare=m_taresum/m_tarecount;
+        qDebug()<<"tare:"<<m_tare;
+        m_count=0; m_taresum=0; m_tarecount=0;
+    }
 }
 
 void c_com::readError()
@@ -67,6 +105,38 @@ void c_com::readError()
     m_error=m_serial->error();
     qDebug()<<"Error:"<<m_error;
     emit errorChanged();
+}
+
+qreal c_com::devider() const
+{
+    return m_devider;
+}
+
+void c_com::setDevider(const qreal &devider)
+{
+    m_devider = devider;
+}
+
+void c_com::setWeight(const qreal &weight)
+{
+    if(m_weight==weight) return;
+    m_weight = weight;
+    emit weightChanged();
+}
+
+qreal c_com::weight() const
+{
+    return m_weight;
+}
+
+qint32 c_com::tare() const
+{
+    return m_tare;
+}
+
+void c_com::setTare(const qint32 &tare)
+{
+    m_tare = tare;
 }
 
 QStringList c_com::ports() const
