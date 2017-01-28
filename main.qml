@@ -11,10 +11,32 @@ ApplicationWindow {
 
     Measurer {
         id: m
-        Component.onCompleted: m.openSerialPort();
+        Component.onCompleted:{
+            m.listPorts();
+            console.debug(m.ports);
+            m.openSerialPort(5);
+        }
     }
     Text {
         id: txt
-        text: qsTr(m.name+" \r\n"+m.data+"\n\r  e="+m.error)
+        x: 90
+        y: 154
+        text: qsTr(m.name+" \r\n"+"\n\r  e="+m.error)
+    }
+
+    ComboBox {
+        id: portslist
+        x: 90
+        y: 79
+    }
+
+    Text {
+        id: text1
+        x: 205
+        y: 154
+        width: 77
+        height: 22
+        text: qsTr(m.data)
+        font.pixelSize: 12
     }
 }

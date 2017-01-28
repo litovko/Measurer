@@ -11,6 +11,7 @@ class c_com : public QObject
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)
     Q_PROPERTY(QSerialPort::SerialPortError error READ error WRITE setError NOTIFY errorChanged)
+    Q_PROPERTY(QStringList ports READ ports NOTIFY portsChanged)
 public:
     explicit c_com(QObject *parent = 0);
     virtual ~c_com();
@@ -25,20 +26,26 @@ public:
     QSerialPort::SerialPortError error() const;
     void setError(const QSerialPort::SerialPortError &error);
 
+    QStringList ports() const;
+
+
 signals:
     void nameChanged();
     void dataChanged();
     void errorChanged();
+    void portsChanged();
 
 
 public slots:
-    Q_INVOKABLE void openSerialPort();
+    Q_INVOKABLE void openSerialPort(int port);
+    Q_INVOKABLE void listPorts();
     void readData();
     void readError();
 
+
 private:
     QSerialPort *m_serial;
-    QString m_name="COM3";
+    QString m_name="null";
     qint32 m_baudRate=QSerialPort::Baud115200;
     QSerialPort::DataBits m_dataBits=QSerialPort::Data8;
     QSerialPort::Parity m_parity=QSerialPort::NoParity;
@@ -46,6 +53,7 @@ private:
     QSerialPort::FlowControl m_flowControl=QSerialPort::NoFlowControl;
     QSerialPort::SerialPortError m_error=QSerialPort::NoError;
     QString m_data;
+    QStringList m_ports;
 
 };
 
