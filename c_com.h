@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtSerialPort/QSerialPort>
 #include <QString>
+#include "c_mstat.h"
 
 class c_com : public QObject
 {
@@ -14,6 +15,7 @@ class c_com : public QObject
     Q_PROPERTY(QStringList ports READ ports NOTIFY portsChanged)
     //=============================
     Q_PROPERTY(qreal weight READ weight NOTIFY weightChanged)
+    Q_PROPERTY(qreal average READ average NOTIFY averageChanged)
 public:
     explicit c_com(QObject *parent = 0);
     virtual ~c_com();
@@ -41,6 +43,11 @@ public:
     qreal devider() const;
     void setDevider(const qreal &devider);
 
+
+
+    qreal average() const;
+    void setAverage(const qreal &average);
+
 signals:
     void nameChanged();
     void dataChanged();
@@ -49,6 +56,7 @@ signals:
 
     //====================
     void weightChanged();
+    void averageChanged();
 
 
 public slots:
@@ -63,6 +71,7 @@ public slots:
 
 private:
     QSerialPort *m_serial;
+    c_mstat *m_stat;
     QString m_name="null";
     qint32 m_baudRate=QSerialPort::Baud115200;
     QSerialPort::DataBits m_dataBits=QSerialPort::Data8;
@@ -77,6 +86,11 @@ private:
     qint32 m_tare=0;
     qreal m_devider=1;
     qreal m_weight;
+    qreal m_average;
+
+
+
+    //==
     qint32 m_count=0;
     qint32 m_tarecount=0;
     qint64 m_taresum=0;

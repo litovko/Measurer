@@ -4,6 +4,7 @@
 c_com::c_com(QObject *parent) : QObject(parent)
 {
     m_serial = new QSerialPort(this);
+    m_stat = new c_mstat();
 
     connect(m_serial, SIGNAL(readyRead()), this, SLOT(readData()));
     //connect(m_serial, SIGNAL(error()), this, SLOT(readError()));
@@ -107,6 +108,20 @@ void c_com::readError()
     emit errorChanged();
 }
 
+qreal c_com::average() const
+{
+    return m_average;
+}
+
+void c_com::setAverage(const qreal &average)
+{
+    if (m_average == average) return;
+    m_average = average;
+    emit averageChanged();
+}
+
+
+
 qreal c_com::devider() const
 {
     return m_devider;
@@ -119,9 +134,11 @@ void c_com::setDevider(const qreal &devider)
 
 void c_com::setWeight(const qreal &weight)
 {
-    if(m_weight==weight) return;
+    m_stat->addPoint(weight);
+    setAverage(m_stat->average());
     m_weight = weight;
     emit weightChanged();
+
 }
 
 qreal c_com::weight() const

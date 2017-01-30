@@ -20,7 +20,7 @@ ApplicationWindow {
               m.calibrate(33.9);
               break;
           case "TARE10":
-              m.tare(10);
+              m.tare(25);
               break;
           case "RESET":
               m.reset();
@@ -83,6 +83,15 @@ ApplicationWindow {
             width: 77
             height: 22
             text: m.weight.toString()
+            font.pixelSize: 12
+        }
+        Text {
+            id: text2
+            x: 205
+            y: 184
+            width: 77
+            height: 22
+            text: m.average.toString()
             font.pixelSize: 12
         }
     }
