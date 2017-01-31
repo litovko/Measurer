@@ -12,10 +12,11 @@ class c_com : public QObject
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)
     Q_PROPERTY(QSerialPort::SerialPortError error READ error WRITE setError NOTIFY errorChanged)
-    Q_PROPERTY(QStringList ports READ ports NOTIFY portsChanged)
+    Q_PROPERTY(QStringList ports READ ports NOTIFY portsChanged) //Список доступных портов
     //=============================
     Q_PROPERTY(qreal weight READ weight NOTIFY weightChanged)
     Q_PROPERTY(qreal average READ average NOTIFY averageChanged)
+    Q_PROPERTY(qreal rotor READ rotor NOTIFY rotorChanged)
 public:
     explicit c_com(QObject *parent = 0);
     virtual ~c_com();
@@ -48,6 +49,9 @@ public:
     qreal average() const;
     void setAverage(const qreal &average);
 
+    qreal rotor() const;
+    void setRotor(const qreal &rotor);
+
 signals:
     void nameChanged();
     void dataChanged();
@@ -57,6 +61,7 @@ signals:
     //====================
     void weightChanged();
     void averageChanged();
+    void rotorChanged();
 
 
 public slots:
@@ -65,13 +70,15 @@ public slots:
     Q_INVOKABLE void tare(int count); //find zero in count number measures
     Q_INVOKABLE void calibrate(qreal cur_weight);
     Q_INVOKABLE void reset();
+    Q_INVOKABLE void writeData(const QByteArray &data);
+
     void readData();
     void readError();
 
 
 private:
     QSerialPort *m_serial;
-    c_mstat *m_stat;
+    c_mstat *m_stat; //выборка - массив
     QString m_name="null";
     qint32 m_baudRate=QSerialPort::Baud115200;
     QSerialPort::DataBits m_dataBits=QSerialPort::Data8;
@@ -85,9 +92,10 @@ private:
     //===============================
     qint32 m_tare=0;
     qreal m_devider=1;
-    qreal m_weight;
-    qreal m_average;
-
+    qreal m_weight;  //вес
+    qreal m_average; //средний вес
+    //====
+    qreal m_rotor=0;
 
 
     //==

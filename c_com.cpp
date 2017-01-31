@@ -84,6 +84,11 @@ void c_com::readData()
 {
     bool ok;
     setData(m_serial->readAll());
+    if(m_data[0]=='r') {
+        m_data.remove(0,1);
+        int w=m_data.toInt(&ok,10); if(!ok) return;
+        setRotor(w/100.0);
+    }
     int w=m_data.toInt(&ok,10); if(!ok) return;
     setWeight((w-m_tare)/m_devider);
     if (m_tarecount==0) return;
@@ -99,6 +104,10 @@ void c_com::readData()
         m_count=0; m_taresum=0; m_tarecount=0;
     }
 }
+void c_com::writeData(const QByteArray &data)
+  {
+      m_serial->write(data);
+  }
 
 void c_com::readError()
 {
@@ -106,6 +115,18 @@ void c_com::readError()
     m_error=m_serial->error();
     qDebug()<<"Error:"<<m_error;
     emit errorChanged();
+}
+
+qreal c_com::rotor() const
+{
+    return m_rotor;
+}
+
+void c_com::setRotor(const qreal &rotor)
+{
+    if (m_rotor == rotor) return;
+    m_rotor = rotor;
+    emit rotorChanged();
 }
 
 qreal c_com::average() const

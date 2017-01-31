@@ -25,8 +25,8 @@ ApplicationWindow {
           case "RESET":
               m.reset();
               break;
-          case "HELP":
-
+          case "START":
+              m.writeData("S")
               break;
 
           case "MENU":
@@ -38,6 +38,24 @@ ApplicationWindow {
         }
 
     }
+    function porterror(err){
+        switch (err){
+            case 0: return "";
+            case 11: return "неизвестная ошибка";
+            case 12: return "ошибка по таймауту";
+            case 10: return "запрещенная операция";
+            case 9: return "неожиданное извлечение";
+            case 8: return "ошибка чтения";
+            case 7: return "ошибка записи";
+            case 6: return "break condition detected";
+            case 5: return "framing error";
+            case 4: return "ошибка четности";
+            case 3: return "ошибка открытия порта";
+            case 2: return "ошибка доступа к порту";
+            case 1: return "порт не найден";
+        }
+    }
+
     Rectangle{
         color: "#f9f8ba"
         border.color: "#030564"
@@ -46,6 +64,7 @@ ApplicationWindow {
         Keys.onPressed: {
             console.log("KEY:"+event.key)
             if (event.key === Qt.Key_F1 || event.key === Qt.Key_1) win.fcommand("HELP")
+            if (event.key === Qt.Key_F2 || event.key === Qt.Key_2) win.fcommand("START")
             if (event.key === Qt.Key_F8||event.key ===  Qt.Key_8)     win.fcommand("CALIBRATE")
             if (event.key === Qt.Key_F9||event.key ===  Qt.Key_9)     win.fcommand("TARE10")
             if (event.key === Qt.Key_F10||event.key === Qt.Key_0)     win.fcommand("QUIT")
@@ -67,7 +86,7 @@ ApplicationWindow {
             id: txt
             x: 90
             y: 154
-            text: qsTr(m.name+" \r\n"+"\n\r  e="+m.error)
+            text: qsTr(m.name+" \r\n"+"\n\r  e="+porterror(m.error))
         }
 
         ComboBox {
