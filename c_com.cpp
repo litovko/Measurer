@@ -92,13 +92,14 @@ void c_com::readData()
         w=m_data.toInt(&ok,10); if(!ok) return;
         setRotor(w/100.0);
     }
-    if(m_data[0]=='d') { // d 180000 65535
+    if(m_data[0]=='d') { // d01781:65912
         m_data.remove(0,1);
-        QString s=m_data.left(6);
+        QString s=m_data.left(5);
         r=s.toInt(&ok,10); if(!ok) return;
         m_data.remove(0,6);
         w=m_data.toInt(&ok,10); if(!ok) return;
         m_stat->addPoint(r,w);
+        qDebug()<<"r="<<r<<"w="<<w;
 
     }
     w=m_data.toInt(&ok,10); if(!ok) return;
