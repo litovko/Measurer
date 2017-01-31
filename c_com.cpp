@@ -9,8 +9,10 @@ c_com::c_com(QObject *parent) : QObject(parent)
     connect(m_serial, SIGNAL(readyRead()), this, SLOT(readData()));
     //connect(m_serial, SIGNAL(error()), this, SLOT(readError()));
 
-    connect(m_serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
-            this, &c_com::readError);
+//    connect(m_serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+//            this, &c_com::readError);
+    connect(m_serial, SIGNAL(error(QSerialPort::SerialPortError)),
+            this, SLOT(readError()));
 }
 
 c_com::~c_com()
@@ -83,13 +85,23 @@ void c_com::reset()
 void c_com::readData()
 {
     bool ok;
+    int w,r;
     setData(m_serial->readAll());
     if(m_data[0]=='r') {
         m_data.remove(0,1);
-        int w=m_data.toInt(&ok,10); if(!ok) return;
+        w=m_data.toInt(&ok,10); if(!ok) return;
         setRotor(w/100.0);
     }
-    int w=m_data.toInt(&ok,10); if(!ok) return;
+    if(m_data[0]=='d') { // d 180000 65535
+        m_data.remove(0,1);
+        QString s=m_data.left(6);
+        r=s.toInt(&ok,10); if(!ok) return;
+        m_data.remove(0,6);
+        w=m_data.toInt(&ok,10); if(!ok) return;
+        m_stat->addPoint(r,w);
+
+    }
+    w=m_data.toInt(&ok,10); if(!ok) return;
     setWeight((w-m_tare)/m_devider);
     if (m_tarecount==0) return;
     if (m_count>0&&m_count<=m_tarecount) {
@@ -106,8 +118,19 @@ void c_com::readData()
 }
 void c_com::writeData(const QByteArray &data)
   {
-      m_serial->write(data);
-  }
+    m_serial->write(data);
+}
+
+void c_com::start()
+{
+   int i=m_serial->write("s");
+   if (i!=1) {
+       qDebug()<<"Write error:";
+   }
+
+
+   m_stat->init();
+}
 
 void c_com::readError()
 {
@@ -192,6 +215,8 @@ QSerialPort::SerialPortError c_com::error() const
 void c_com::setError(const QSerialPort::SerialPortError &error)
 {
     m_error = error;
+    emit errorChanged();
+    qDebug()<<"Error:"<<error;
 }
 
 QString c_com::data() const

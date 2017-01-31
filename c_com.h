@@ -71,7 +71,7 @@ public slots:
     Q_INVOKABLE void calibrate(qreal cur_weight);
     Q_INVOKABLE void reset();
     Q_INVOKABLE void writeData(const QByteArray &data);
-
+    Q_INVOKABLE void start();
     void readData();
     void readError();
 

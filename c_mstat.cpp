@@ -24,6 +24,17 @@ void c_mstat::addPoint(const qreal &point)
     process();
 }
 
+void c_mstat::addPoint(const qint16 &r, const qint16 &w)
+{
+    m_array[r][0]=r;
+    m_array[r][1]=w;
+}
+
+void c_mstat::init()
+{
+    for (int i=0;i<ARRAY_SIZE;i++) m_array[i][0]=0;
+}
+
 int c_mstat::number() const
 {
     return m_number;

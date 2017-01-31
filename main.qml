@@ -26,7 +26,7 @@ ApplicationWindow {
               m.reset();
               break;
           case "START":
-              m.writeData("S")
+              m.start();
               break;
 
           case "MENU":
@@ -41,6 +41,7 @@ ApplicationWindow {
     function porterror(err){
         switch (err){
             case 0: return "";
+            case 99: return "ошибка записи в порт";
             case 11: return "неизвестная ошибка";
             case 12: return "ошибка по таймауту";
             case 10: return "запрещенная операция";
