@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QSettings>
 #include "c_com.h"
@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
     QSettings settings(giko_name, giko_program);
     qmlRegisterType<c_com>("Gyco", 1, 0, "Measurer");
 
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
+    //QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication app(argc, argv);
     app.setOrganizationName(giko_name);
     app.setOrganizationDomain("hyco.ru");
     app.setApplicationName(giko_program);

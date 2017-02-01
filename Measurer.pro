@@ -1,4 +1,4 @@
-QT += qml quick serialport
+QT += qml quick serialport charts
 
 CONFIG += c++11
 
@@ -19,3 +19,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     c_com.h \
     c_mstat.h
+
+DISTFILES +=

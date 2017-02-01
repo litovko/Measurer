@@ -99,6 +99,7 @@ void c_com::readData()
         m_data.remove(0,6);
         w=m_data.toInt(&ok,10); if(!ok) return;
         m_stat->addPoint(r,w);
+        setRotor(r);
         qDebug()<<"r="<<r<<"w="<<w;
 
     }

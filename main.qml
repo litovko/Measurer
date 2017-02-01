@@ -80,8 +80,16 @@ ApplicationWindow {
                 m.listPorts();
                 console.debug(m.ports);
                 m.openSerialPort(1);
-                m.tare(100);
+                //m.tare(100);
             }
+            onWeightChanged: {
+                //mc.addpoint(m/10);
+
+            }
+            onRotorChanged: {
+                mc.addpoint(m.weight)
+            }
+
         }
         Text {
             id: txt
@@ -113,6 +121,13 @@ ApplicationWindow {
             height: 22
             text: m.average.toString()
             font.pixelSize: 12
+        }
+        MChart {
+            id: mc
+            height: 600
+            width: 800
+            anchors.right:  parent.right
+            anchors.bottom: parent.bottom
         }
     }
 }
