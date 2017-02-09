@@ -3,15 +3,15 @@ import QtCharts 2.0
 
 Item {
     id: chart
-    property int maxX: 180
+    property int maxX: 200
     property int minХ: 0
-    property int maxY: 100000
+    property int maxY: 1000000
 
-    property int minY: 64000
+    property int minY: 0
 
     property string seriesName: "Сдвиг"
     property string chartName: "График нагрузки"
-
+    property var ser
 
     function addpoint(p) {
         var c=ls.count
@@ -45,10 +45,10 @@ Item {
             LineSeries {
                 id: ls
                 name: seriesName
-                //style: Qt.DotLine
+                style: Qt.DotLine
                 capStyle: Qt.RoundCap
-                color: "blue"
-                width: 4
+                color: "green"
+                width: 2
                 ValueAxis {
                         id: axisX
                         min: chart.minХ
@@ -71,6 +71,7 @@ Item {
 
                 axisX: axisX
                 axisY: axisY
+                Component.onCompleted: { ser=ls}
             }
         }
     }

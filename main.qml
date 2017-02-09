@@ -3,12 +3,40 @@ import QtQuick.Controls 2.0
 import Gyco 1.0
 //import QtQuick.Layouts 1.0
 
+// Текущее значение веса
+// Текущая позиция вращающегося стола в градусах
+// Порт
+// Статус соединения
+// График текущих значений
+
+// Окно параметров
+// - смещение нуля
+// - масштабирующий коэффициент
+// - коэффициент погрешности
+// - радиус ролика
+// - вес груза
+// - значение, соответствующее весу груза
+
+// График измерения усилия по результатам калибровки
+// График тау по результатам калибровки
+
+// Окончательный график по итогам измерения
+
+
 ApplicationWindow {
     id: win
     visible: true
-    width: 640
-    height: 480
+    width: 1024
+    height: 768
     title: qsTr("Измеритель")
+//    background: Rectangle{
+//        color: "#000000"
+//        border.color: "#fbf837"
+//        anchors.fill: parent;
+
+
+
+//    }
 
     function fcommand (cmd) {
         console.log ("COMMAND="+cmd)
@@ -17,7 +45,18 @@ ApplicationWindow {
               Qt.quit();
               break;
           case "CALIBRATE":
-              m.calibrate(33.9);
+              //m.calibrate(33.9);
+              calibrate.visible = true;
+              break;
+          case "CALIBRATE START":
+              //m.calibrate(33.9);
+              busyIndicator.visible=true;
+              calibrate.visible = false;
+              m.tare(50);
+              break;
+          case "CALIBRATE STOP":
+              //m.calibrate(33.9);
+              busyIndicator.visible=false;
               break;
           case "TARE10":
               m.tare(25);
@@ -26,7 +65,7 @@ ApplicationWindow {
               m.reset();
               break;
           case "START":
-              m.start();
+              //m.start();
               break;
 
           case "MENU":
@@ -58,20 +97,83 @@ ApplicationWindow {
     }
 
     Rectangle{
-        color: "#f9f8ba"
-        border.color: "#030564"
+        color: "#000000"
+        border.color: "yellow"
+        border.width: 3
+        radius: 10
         anchors.fill: parent
         focus: true
         Keys.onPressed: {
             console.log("KEY:"+event.key)
             if (event.key === Qt.Key_F1 || event.key === Qt.Key_1) win.fcommand("HELP")
             if (event.key === Qt.Key_F2 || event.key === Qt.Key_2) win.fcommand("START")
-            if (event.key === Qt.Key_F8||event.key ===  Qt.Key_8)     win.fcommand("CALIBRATE")
+            if (event.key === Qt.Key_F5||event.key ===  Qt.Key_5)     win.fcommand("CALIBRATE")
             if (event.key === Qt.Key_F9||event.key ===  Qt.Key_9)     win.fcommand("TARE10")
             if (event.key === Qt.Key_F10||event.key === Qt.Key_0)     win.fcommand("QUIT")
             if (event.key === Qt.Key_F11)     win.fcommand("RESET")
 
             if (event.key === Qt.Key_F12||event.key === Qt.Key_Equal) win.fcommand("FULLSCREEN")
+        }
+        BusyIndicator {
+            id: busyIndicator
+            padding: 6
+            anchors.centerIn: parent
+            visible: false
+        }
+        Row {
+            id: r
+            anchors.margins: 10
+            anchors.left: parent.left
+            anchors.top: parent.top
+            spacing: 20
+            readonly  property int wo: 160
+            MyMenuItem{
+                width: r.wo
+                height: 40
+                text: "СТАРТ [F2]"
+                command: "START"
+                onButtonClicked: win.fcommand(command)
+            }
+            MyMenuItem{
+                width: r.wo
+                height: 40
+                text: "КАЛИБРОВКА [F5]"
+                command: "CALIBRATE"
+                onButtonClicked: win.fcommand(command)
+            }
+            MyMenuItem{
+                width: r.wo
+                height: 40
+                text: "НАСТРОЙКА [F8]"
+                command: "SETTINGS"
+                onButtonClicked: win.fcommand(command)
+            }
+        }
+        Column {
+            id: c
+            anchors.margins: 10
+            anchors.left: parent.left
+            anchors.top: r.bottom
+            MyDigital {
+                value: m.weight
+                width: 160
+                height: 40
+            }
+            MyDigital {
+                value: m.average
+                width: 160
+                height: 40
+            }
+            MyDigital {
+                value: m.radius
+                width: 160
+                height: 40
+            }
+            MyDigital {
+                value: m.tare0
+                width: 160
+                height: 40
+            }
         }
 
         Measurer {
@@ -81,53 +183,40 @@ ApplicationWindow {
                 console.debug(m.ports);
                 m.openSerialPort(1);
                 //m.tare(100);
-            }
-            onWeightChanged: {
-                //mc.addpoint(m/10);
-
-            }
-            onRotorChanged: {
-                mc.addpoint(m.weight)
+                m.radius=2.5
             }
 
-        }
-        Text {
-            id: txt
-            x: 90
-            y: 154
-            text: qsTr(m.name+" \r\n"+"\n\r  e="+porterror(m.error))
+            series:  mc.ser
+            onStopTare: win.fcommand("CALIBRATE STOP")
+
         }
 
-        ComboBox {
-            id: portslist
-            x: 90
-            y: 79
+        MyStatus {
+            id: status
+
+            status_text:  m.name+':'+ porterror(m.error)+''
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 10
+            height: 40
         }
 
-        Text {
-            id: text1
-            x: 205
-            y: 154
-            width: 77
-            height: 22
-            text: m.weight.toString()
-            font.pixelSize: 12
-        }
-        Text {
-            id: text2
-            x: 205
-            y: 184
-            width: 77
-            height: 22
-            text: m.average.toString()
-            font.pixelSize: 12
-        }
         MChart {
             id: mc
-            height: 600
-            width: 800
+            height: 300
+            width: 300
             anchors.right:  parent.right
-            anchors.bottom: parent.bottom
+            anchors.bottom: status.top
+            //Component.onCompleted: {m.fill()
+        }
+        MyCalibrate {
+            id: calibrate
+            visible: false
+            height: 200
+            width: 500
+            anchors.centerIn: parent
+            onButtonClicked: win.fcommand(command)
         }
     }
 }

@@ -7,12 +7,13 @@ c_com::c_com(QObject *parent) : QObject(parent)
     m_stat = new c_mstat();
 
     connect(m_serial, SIGNAL(readyRead()), this, SLOT(readData()));
-    //connect(m_serial, SIGNAL(error()), this, SLOT(readError()));
-
-//    connect(m_serial, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
-//            this, &c_com::readError);
+    connect(this,SIGNAL(seriesChanged()), this, SLOT(fill()));
     connect(m_serial, SIGNAL(error(QSerialPort::SerialPortError)),
             this, SLOT(readError()));
+    fill();
+    emit radiusChanged();
+    setRadius(2.1);
+    qDebug()<<"Rad="<<getRadius();
 }
 
 c_com::~c_com()
@@ -78,7 +79,7 @@ void c_com::reset()
     m_count=0;
     m_tarecount=0;
     m_taresum=0;
-    m_tare=0;
+    m_tare0=0;
 
 }
 
@@ -98,25 +99,30 @@ void c_com::readData()
         r=s.toInt(&ok,10); if(!ok) return;
         m_data.remove(0,6);
         w=m_data.toInt(&ok,10); if(!ok) return;
+
         m_stat->addPoint(r,w);
         setRotor(r);
         qDebug()<<"r="<<r<<"w="<<w;
+        return;
 
     }
     w=m_data.toInt(&ok,10); if(!ok) return;
-    setWeight((w-m_tare)/m_devider);
+    //qDebug()<<"current:"<<current;
+    series->append(current,w); current++; if (current>NUM_POINTS) { current=0; fill();}
+    setWeight((w-m_tare0)/m_devider);
     if (m_tarecount==0) return;
     if (m_count>0&&m_count<=m_tarecount) {
         m_taresum=m_taresum+w;
         qDebug()<<"c:"<<m_count<<"tare:"<<m_taresum;
         m_count++;
+        if (m_count>m_tarecount) {
+            setTare0(m_taresum/m_tarecount);
+            qDebug()<<"tare:"<<m_tare0;
+            m_count=0; m_taresum=0; m_tarecount=0;
+            emit stopTare();
+        }
+    }
 
-    }
-    if (m_count-1==m_tarecount) {
-        m_tare=m_taresum/m_tarecount;
-        qDebug()<<"tare:"<<m_tare;
-        m_count=0; m_taresum=0; m_tarecount=0;
-    }
 }
 void c_com::writeData(const QByteArray &data)
   {
@@ -140,6 +146,53 @@ void c_com::readError()
     m_error=m_serial->error();
     qDebug()<<"Error:"<<m_error;
     emit errorChanged();
+}
+
+void c_com::fill()
+{
+    ;
+    if (series==NULL) return;
+    series->clear();
+//    for (int i=0; i<=NUM_POINTS; i++)
+//    {
+//        series->append(i, 0.0);
+//    }
+}
+
+qreal c_com::getRadius() const
+{
+    return m_radius;
+}
+
+qint32 c_com::tare0() const
+{
+    return m_tare0;
+}
+
+void c_com::setTare0(const qint32 &tare0)
+{
+    m_tare0 = tare0;
+    emit tare0Changed();
+}
+
+
+void c_com::setRadius(const qreal &radius)
+{
+    m_radius = radius;
+    emit radiusChanged();
+    qDebug()<<"CHRAD";
+    qDebug()<<"Rad="<<getRadius();
+}
+
+QXYSeries *c_com::getSeries() const
+{
+    return series;
+}
+
+void c_com::setSeries(QXYSeries *value)
+{
+    series = value;
+    emit seriesChanged();
 }
 
 qreal c_com::rotor() const
@@ -176,6 +229,7 @@ qreal c_com::devider() const
 void c_com::setDevider(const qreal &devider)
 {
     m_devider = devider;
+
 }
 
 void c_com::setWeight(const qreal &weight)
@@ -192,15 +246,7 @@ qreal c_com::weight() const
     return m_weight;
 }
 
-qint32 c_com::tare() const
-{
-    return m_tare;
-}
 
-void c_com::setTare(const qint32 &tare)
-{
-    m_tare = tare;
-}
 
 QStringList c_com::ports() const
 {
@@ -240,4 +286,5 @@ QString c_com::name() const
 void c_com::setName(const QString &name)
 {
     m_name = name;
+    emit nameChanged();
 }

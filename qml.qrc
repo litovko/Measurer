@@ -2,5 +2,9 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>MChart.qml</file>
+        <file>MyMenuItem.qml</file>
+        <file>MyDigital.qml</file>
+        <file>MyStatus.qml</file>
+        <file>MyCalibrate.qml</file>
     </qresource>
 </RCC>

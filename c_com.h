@@ -2,21 +2,29 @@
 #define C_COM_H
 
 #include <QObject>
+#include <QtCharts>
 #include <QtSerialPort/QSerialPort>
 #include <QString>
 #include "c_mstat.h"
 
+#define NUM_POINTS 200
+using namespace QtCharts;
+
 class c_com : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged) // имя порта
+    Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)  // строка, пришедшая от контроллера
     Q_PROPERTY(QSerialPort::SerialPortError error READ error WRITE setError NOTIFY errorChanged)
     Q_PROPERTY(QStringList ports READ ports NOTIFY portsChanged) //Список доступных портов
     //=============================
-    Q_PROPERTY(qreal weight READ weight NOTIFY weightChanged)
-    Q_PROPERTY(qreal average READ average NOTIFY averageChanged)
-    Q_PROPERTY(qreal rotor READ rotor NOTIFY rotorChanged)
+    Q_PROPERTY(qreal weight READ weight NOTIFY weightChanged) // текущий вес
+    Q_PROPERTY(qreal average READ average NOTIFY averageChanged) // среднее значение веса
+    Q_PROPERTY(qreal rotor READ rotor NOTIFY rotorChanged) // относительное положение ротора в градусах
+    Q_PROPERTY(qreal radius READ getRadius WRITE setRadius NOTIFY radiusChanged) // радиус ролика
+    Q_PROPERTY(qreal tare0 READ tare0 NOTIFY tare0Changed) // радиус ролика
+    //*******************************************
+    Q_PROPERTY(QXYSeries *series READ getSeries WRITE setSeries NOTIFY seriesChanged) // серия данных для графика
 public:
     explicit c_com(QObject *parent = 0);
     virtual ~c_com();
@@ -34,8 +42,6 @@ public:
     QStringList ports() const;
 
 
-    qint32 tare() const;
-    void setTare(const qint32 &tare);
 
     qreal weight() const;
 
@@ -52,6 +58,17 @@ public:
     qreal rotor() const;
     void setRotor(const qreal &rotor);
 
+    QXYSeries *getSeries() const;
+    void setSeries(QXYSeries *value);
+
+    qreal getRadius() const;
+    void setRadius(const qreal &getRadius);
+
+    qint32 tare0() const;
+    void setTare0(const qint32 &tare0);
+
+
+
 signals:
     void nameChanged();
     void dataChanged();
@@ -62,6 +79,10 @@ signals:
     void weightChanged();
     void averageChanged();
     void rotorChanged();
+    void radiusChanged();
+    void tare0Changed();
+    void seriesChanged();
+    void stopTare();
 
 
 public slots:
@@ -74,6 +95,8 @@ public slots:
     Q_INVOKABLE void start();
     void readData();
     void readError();
+
+    Q_INVOKABLE void fill();
 
 
 private:
@@ -90,18 +113,23 @@ private:
     QStringList m_ports;
 
     //===============================
-    qint32 m_tare=0;
+    qint32 m_tare0=0; // смещение нуля
     qreal m_devider=1;
     qreal m_weight;  //вес
     qreal m_average; //средний вес
     //====
-    qreal m_rotor=0;
+    qreal m_rotor=180;
+    qreal m_radius=2.1; // радиус ролика в миллиметрах
 
 
     //==
     qint32 m_count=0;
     qint32 m_tarecount=0;
     qint64 m_taresum=0;
+    //================================
+    QXYSeries *series=0;
+    int current=0;
+
 
 };
 
