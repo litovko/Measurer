@@ -132,6 +132,9 @@ private:
     QXYSeries *series=0;
     int current=0;
 
+    void saveSettings();
+    void readSettings();
+
 
 };
 

@@ -157,32 +157,32 @@ ApplicationWindow {
             MyDigital {
                 name: "Сила :"
                 value: m.weight
-                width: 180
+                width: 280
                 height: 40
             }
             MyDigital {
                 name: "Средн:"
                 value: m.average
-                width: 180
+                width: 280
                 height: 40
             }
 
             MyDigital {
                 name: "Смещ.:"
                 value: m.tare0
-                width: 180
+                width: 280
                 height: 40
             }
             MyDigital {
                 name: "Рад. :"
                 value: m.pulley*1000
-                width: 180
+                width: 280
                 height: 40
             }
             MyDigital {
                 name: "Угол :"
                 value: m.rotor*1000
-                width: 180
+                width: 280
                 height: 40
             }
         }
@@ -192,7 +192,7 @@ ApplicationWindow {
             Component.onCompleted:{
                 m.listPorts();
                 console.debug(m.ports);
-                m.openSerialPort(1);
+                m.openSerialPort(0);
 
 
             }
@@ -228,6 +228,9 @@ ApplicationWindow {
             width: 500
             anchors.centerIn: parent
             onButtonClicked: win.fcommand(command)
+        }
+        MySettingsForm {
+            anchors.centerIn: parent
         }
     }
 }

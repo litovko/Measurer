@@ -6,5 +6,7 @@
         <file>MyDigital.qml</file>
         <file>MyStatus.qml</file>
         <file>MyCalibrate.qml</file>
+        <file>MySettings.qml</file>
+        <file>MySettingsForm.ui.qml</file>
     </qresource>
 </RCC>

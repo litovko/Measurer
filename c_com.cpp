@@ -1,6 +1,7 @@
 #include "c_com.h"
 #include <qdebug.h>
 #include <QtSerialPort/QSerialPortInfo>
+#include <QSettings>
 c_com::c_com(QObject *parent) : QObject(parent)
 {
     m_serial = new QSerialPort(this);
@@ -11,24 +12,47 @@ c_com::c_com(QObject *parent) : QObject(parent)
     connect(m_serial, SIGNAL(error(QSerialPort::SerialPortError)),
             this, SLOT(readError()));
     fill();
-    setPulley(2.5);
+    //setPulley(2.5);
+    readSettings();
 }
 
 c_com::~c_com()
 {
     m_serial->close();
     delete m_serial;
+    saveSettings();
 }
+
+void c_com::saveSettings()
+{
+    QSettings settings("HYCO", "PRIBOR");
+    settings.setValue("PortName",name());
+    settings.setValue("PulleyRadius",getPulley());
+    settings.setValue("TareWeight",tare0());
+    settings.setValue("Devider",devider());
+
+}
+
+void c_com::readSettings()
+{
+    QSettings settings("HYCO", "PRIBOR");
+    setName(settings.value("PortName","COM11").toString());
+    setPulley(settings.value("PulleyRadius",2.1).toReal());
+    setTare0(settings.value("TareWeight",0.0).toReal());
+    setDevider(settings.value("Devider",1.0).toReal());
+}
+
+
 
 void c_com::openSerialPort(int port)
 {
-        m_name="NULL";
+
     if (port>=m_ports.length()) {
         qDebug()<<"WRONG PORT NUMBER";
         return;
     }
 
-    m_name=m_ports.at(port);
+    if (port>0) m_name=m_ports.at(port);
     m_serial->setPortName(m_name);
     m_serial->setBaudRate(m_baudRate);
     m_serial->setDataBits(m_dataBits);
