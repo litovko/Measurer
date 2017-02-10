@@ -11,9 +11,7 @@ c_com::c_com(QObject *parent) : QObject(parent)
     connect(m_serial, SIGNAL(error(QSerialPort::SerialPortError)),
             this, SLOT(readError()));
     fill();
-    emit radiusChanged();
-    setRadius(2.1);
-    qDebug()<<"Rad="<<getRadius();
+    setPulley(2.5);
 }
 
 c_com::~c_com()
@@ -159,10 +157,18 @@ void c_com::fill()
 //    }
 }
 
-qreal c_com::getRadius() const
+qreal c_com::getPulley() const
 {
-    return m_radius;
+    return m_pulley;
 }
+
+void c_com::setPulley(const qreal &pulley)
+{
+    m_pulley = pulley;
+    emit pulleyChanged();
+}
+
+
 
 qint32 c_com::tare0() const
 {
@@ -176,13 +182,6 @@ void c_com::setTare0(const qint32 &tare0)
 }
 
 
-void c_com::setRadius(const qreal &radius)
-{
-    m_radius = radius;
-    emit radiusChanged();
-    qDebug()<<"CHRAD";
-    qDebug()<<"Rad="<<getRadius();
-}
 
 QXYSeries *c_com::getSeries() const
 {

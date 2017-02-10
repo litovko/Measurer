@@ -21,7 +21,7 @@ class c_com : public QObject
     Q_PROPERTY(qreal weight READ weight NOTIFY weightChanged) // текущий вес
     Q_PROPERTY(qreal average READ average NOTIFY averageChanged) // среднее значение веса
     Q_PROPERTY(qreal rotor READ rotor NOTIFY rotorChanged) // относительное положение ротора в градусах
-    Q_PROPERTY(qreal radius READ getRadius WRITE setRadius NOTIFY radiusChanged) // радиус ролика
+    Q_PROPERTY(qreal pulley READ getPulley() WRITE setPulley NOTIFY pulleyChanged)
     Q_PROPERTY(qreal tare0 READ tare0 NOTIFY tare0Changed) // радиус ролика
     //*******************************************
     Q_PROPERTY(QXYSeries *series READ getSeries WRITE setSeries NOTIFY seriesChanged) // серия данных для графика
@@ -61,25 +61,26 @@ public:
     QXYSeries *getSeries() const;
     void setSeries(QXYSeries *value);
 
-    qreal getRadius() const;
-    void setRadius(const qreal &getRadius);
 
     qint32 tare0() const;
     void setTare0(const qint32 &tare0);
 
 
 
+    qreal getPulley() const;
+    void setPulley(const qreal &pulley);
+
 signals:
     void nameChanged();
     void dataChanged();
     void errorChanged();
     void portsChanged();
-
+    void pulleyChanged();
     //====================
     void weightChanged();
     void averageChanged();
     void rotorChanged();
-    void radiusChanged();
+
     void tare0Changed();
     void seriesChanged();
     void stopTare();
@@ -119,7 +120,8 @@ private:
     qreal m_average; //средний вес
     //====
     qreal m_rotor=180;
-    qreal m_radius=2.1; // радиус ролика в миллиметрах
+    qreal m_pulley;
+
 
 
     //==

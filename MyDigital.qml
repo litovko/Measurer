@@ -2,6 +2,7 @@ import QtQuick 2.0
 
 Item {
     property real value: 0
+    property string name: ":"
     Rectangle {
         //color: "transparent"
         anchors.fill: parent
@@ -9,16 +10,32 @@ Item {
         border.color: "#666666"
         border.width: 4
         radius: 6
-        Text {
-           id:t
-           color: "yellow"
-           anchors.margins: 5
-           anchors.fill: parent
-           text: (value/1000).toFixed(1)
-           font.family: "SimSun-ExtB"
-           font.bold: true
-           font.pointSize: t.height-t.anchors.margins*2
-           horizontalAlignment: Text.AlignHCenter
+        Row {
+            id: r
+            anchors.margins: 5
+            anchors.fill: parent
+            Text {
+               id:t2
+               color: "yellow"
+//               anchors.margins: 5
+//               anchors.fill: parent
+               text: name
+               font.family: "SimSun-ExtB"
+               font.bold: true
+               font.pointSize: r.height-r.anchors.margins*2
+               horizontalAlignment: Text.AlignHCenter
+            }
+            Text {
+               id:t
+               color: "yellow"
+
+               text: (value/1000).toFixed(1)
+               font.family: "SimSun-ExtB"
+               font.bold: true
+               font.pointSize: r.height-r.anchors.margins*2
+               horizontalAlignment: Text.AlignHCenter
+            }
+
         }
     }
 

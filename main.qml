@@ -155,23 +155,34 @@ ApplicationWindow {
             anchors.left: parent.left
             anchors.top: r.bottom
             MyDigital {
+                name: "Сила :"
                 value: m.weight
-                width: 160
+                width: 180
                 height: 40
             }
             MyDigital {
+                name: "Средн:"
                 value: m.average
-                width: 160
+                width: 180
                 height: 40
             }
+
             MyDigital {
-                value: m.radius
-                width: 160
-                height: 40
-            }
-            MyDigital {
+                name: "Смещ.:"
                 value: m.tare0
-                width: 160
+                width: 180
+                height: 40
+            }
+            MyDigital {
+                name: "Рад. :"
+                value: m.pulley*1000
+                width: 180
+                height: 40
+            }
+            MyDigital {
+                name: "Угол :"
+                value: m.rotor*1000
+                width: 180
                 height: 40
             }
         }
@@ -182,10 +193,10 @@ ApplicationWindow {
                 m.listPorts();
                 console.debug(m.ports);
                 m.openSerialPort(1);
-                //m.tare(100);
-                m.radius=2.5
-            }
 
+
+            }
+            onPulleyChanged: console.log("pulley radius chaged:"+m.pulley)
             series:  mc.ser
             onStopTare: win.fcommand("CALIBRATE STOP")
 
