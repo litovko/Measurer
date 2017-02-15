@@ -4,8 +4,11 @@ import QtQuick.Controls 2.0
 Item {
     width: 400
     height: 400
+    property alias textField: textField
+    property alias frame: frame
+    property alias buttonCANCEL: buttonCANCEL
+    property alias comboBox: comboBox
     property alias buttonOK: buttonOK
-    property alias comboBox1: comboBox1
 
     Rectangle {
         id: rectangle1
@@ -60,24 +63,71 @@ Item {
             text: qsTr("Отмена")
         }
 
-        ComboBox {
-            id: comboBox1
-            x: 225
-            y: 55
-            textRole: "Порт"
-        }
+        Frame {
+            id: frame
+            x: 34
+            y: 49
+            width: 334
+            height: 287
+            anchors.right: parent.right
+            anchors.rightMargin: 33
 
-        Label {
-            id: label1
-            x: 42
-            y: 60
-            width: 182
-            height: 27
-            color: "#e0e0e0"
-            text: qsTr("Коммуникационный порт")
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignLeft
-            font.pointSize: 10
+            Label {
+                id: label1
+                y: 4
+                width: 151
+                height: 27
+                color: "#e0e0e0"
+                text: qsTr("Коммуникационный порт")
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                font.pointSize: 10
+            }
+
+            ComboBox {
+                id: comboBox
+                x: 160
+                y: -2
+                width: 137
+                height: 40
+                anchors.right: parent.right
+                anchors.rightMargin: 0
+            }
+
+            TextField {
+                id: textField
+                x: 160
+                y: 57
+                width: 150
+                height: 40
+                renderType: Text.QtRendering
+                horizontalAlignment: Text.AlignHCenter
+                font.pointSize: 12
+                anchors.right: parent.right
+                anchors.rightMargin: 0
+            }
+
+            Label {
+                id: label2
+                x: -4
+                y: 63
+                width: 93
+                height: 27
+                color: "#e0e0e0"
+                text: qsTr("Радиус шкива, мм")
+                anchors.leftMargin: 0
+                horizontalAlignment: Text.AlignLeft
+                font.pointSize: 10
+                verticalAlignment: Text.AlignVCenter
+                anchors.left: parent.left
+            }
         }
+    }
+
+    Connections {
+        target: buttonOK
+        onClicked: visible = false
     }
 }

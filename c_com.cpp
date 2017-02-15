@@ -2,7 +2,7 @@
 #include <qdebug.h>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QSettings>
-c_com::c_com(QObject *parent) : QObject(parent)
+c_com::c_com(QObject *parent) : QObject(parent), series(NULL)
 {
     m_serial = new QSerialPort(this);
     m_stat = new c_mstat();
@@ -11,9 +11,13 @@ c_com::c_com(QObject *parent) : QObject(parent)
     connect(this,SIGNAL(seriesChanged()), this, SLOT(fill()));
     connect(m_serial, SIGNAL(error(QSerialPort::SerialPortError)),
             this, SLOT(readError()));
+    connect(m_serial, SIGNAL(aboutToClose()),
+            this, SLOT(readIsOpen()));
     fill();
     //setPulley(2.5);
+    listPorts();
     readSettings();
+
 }
 
 c_com::~c_com()
@@ -36,6 +40,7 @@ void c_com::saveSettings()
 void c_com::readSettings()
 {
     QSettings settings("HYCO", "PRIBOR");
+    listPorts();
     setName(settings.value("PortName","COM11").toString());
     setPulley(settings.value("PulleyRadius",2.1).toReal());
     setTare0(settings.value("TareWeight",0.0).toReal());
@@ -52,7 +57,12 @@ void c_com::openSerialPort(int port)
         return;
     }
 
-    if (port>0) m_name=m_ports.at(port);
+    if (port>=0) m_name=m_ports.at(port);
+    qDebug()<<"openport:"<<m_name<<"port="<<port; emit nameChanged();
+    if(m_serial->isOpen()) {
+        m_serial->close();
+        qDebug()<<"закрыли порт";
+    }
     m_serial->setPortName(m_name);
     m_serial->setBaudRate(m_baudRate);
     m_serial->setDataBits(m_dataBits);
@@ -61,16 +71,20 @@ void c_com::openSerialPort(int port)
     m_serial->setFlowControl(m_flowControl);
     if (m_serial->open(QIODevice::ReadWrite)) {
         qDebug()<<"serial port:"<<m_name<<"has opened";
+        m_isOpen=true; emit isOpenChanged();
+        qDebug()<<"Is open:"<<isOpen();
 
     } else {
         m_error=m_serial->error();
         qDebug()<<"Open port Error:"<<m_error;
+        m_isOpen=false; emit isOpenChanged();
     }
 
 }
 
 void c_com::listPorts()
 {
+    m_ports.clear();
     const auto infos = QSerialPortInfo::availablePorts();
     for (const QSerialPortInfo &info: infos) {
     qDebug() << "Name : " << info.portName();
@@ -148,6 +162,7 @@ void c_com::readData()
 }
 void c_com::writeData(const QByteArray &data)
   {
+    qDebug()<<"WRITE:"<<data;
     m_serial->write(data);
 }
 
@@ -166,8 +181,19 @@ void c_com::readError()
 {
 
     m_error=m_serial->error();
+    if (m_error) {
+        m_isOpen=false; emit isOpenChanged();
+         qDebug()<<"IsOpen:"<<m_isOpen;
+    }
     qDebug()<<"Error:"<<m_error;
     emit errorChanged();
+}
+
+void c_com::readIsOpen()
+{
+    m_isOpen=false;
+    qDebug()<<"IsOpen:"<<m_isOpen;
+    emit isOpenChanged();
 }
 
 void c_com::fill()
@@ -179,6 +205,12 @@ void c_com::fill()
 //    {
 //        series->append(i, 0.0);
 //    }
+}
+
+
+bool c_com::isOpen() const
+{
+    return m_isOpen;
 }
 
 qreal c_com::getPulley() const
@@ -309,5 +341,8 @@ QString c_com::name() const
 void c_com::setName(const QString &name)
 {
     m_name = name;
+    int i=m_ports.indexOf(m_name,0);
+    qDebug()<<"i="<<i<<"m_name:"<<m_name;
+    if (i>0) openSerialPort(i);
     emit nameChanged();
 }

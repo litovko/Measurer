@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import Gyco 1.0
+
 //import QtQuick.Layouts 1.0
 
 // Текущее значение веса
@@ -63,6 +64,9 @@ ApplicationWindow {
               break;
           case "RESET":
               m.reset();
+              break;
+          case "SETTINGS":
+              settings.visible=true;
               break;
           case "START":
               //m.start();
@@ -190,11 +194,9 @@ ApplicationWindow {
         Measurer {
             id: m
             Component.onCompleted:{
-                m.listPorts();
+                //m.listPorts();
                 console.debug(m.ports);
-                m.openSerialPort(0);
-
-
+                //m.openSerialPort(0);
             }
             onPulleyChanged: console.log("pulley radius chaged:"+m.pulley)
             series:  mc.ser
@@ -205,12 +207,14 @@ ApplicationWindow {
         MyStatus {
             id: status
 
-            status_text:  m.name+':'+ porterror(m.error)+''
+            //status_text:  m.name +':'+m.isOpen?'ОТКРЫТ ':'ЗАКРЫТ '+ porterror(m.error)+''
+            status_text: m.name+':'+ porterror(m.error)+''
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.margins: 10
             height: 40
+            lamp: m.isOpen
         }
 
         MChart {
@@ -230,7 +234,30 @@ ApplicationWindow {
             onButtonClicked: win.fcommand(command)
         }
         MySettingsForm {
+            id: settings
+            visible: false
+            onVisibleChanged: {
+
+                 if (visible) {
+                     comboBox.currentIndex= m.ports.indexOf(m.name)>=0?m.ports.indexOf(m.name):0
+                     m.listPorts(); // обновляем список доступных ком-портов и устанавливаем индекс по текущему порту
+                 }
+            }
             anchors.centerIn: parent
+            comboBox.model: m.ports //список доступных ком-портов
+            buttonCANCEL.onClicked: {
+                visible=false;
+            }
+            buttonOK.onClicked: {
+                visible=false;
+                m.openSerialPort(comboBox.currentIndex);
+            }
+            RegExpValidator{
+                id: num_validator
+                regExp: /(?:\d*\.)?\d+/
+            }
+            textField.validator: IntValidator { bottom:5; top: 20}
+            textField.placeholderText: qsTr("Радиус шкива в мм")
         }
     }
 }

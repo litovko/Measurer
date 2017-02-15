@@ -17,6 +17,7 @@ class c_com : public QObject
     Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)  // строка, пришедшая от контроллера
     Q_PROPERTY(QSerialPort::SerialPortError error READ error WRITE setError NOTIFY errorChanged)
     Q_PROPERTY(QStringList ports READ ports NOTIFY portsChanged) //Список доступных портов
+    Q_PROPERTY(bool isOpen READ isOpen NOTIFY isOpenChanged) // статус порта
     //=============================
     Q_PROPERTY(qreal weight READ weight NOTIFY weightChanged) // текущий вес
     Q_PROPERTY(qreal average READ average NOTIFY averageChanged) // среднее значение веса
@@ -70,12 +71,16 @@ public:
     qreal getPulley() const;
     void setPulley(const qreal &pulley);
 
+    bool isOpen() const;
+
+
 signals:
     void nameChanged();
     void dataChanged();
     void errorChanged();
     void portsChanged();
     void pulleyChanged();
+    void isOpenChanged();
     //====================
     void weightChanged();
     void averageChanged();
@@ -96,6 +101,7 @@ public slots:
     Q_INVOKABLE void start();
     void readData();
     void readError();
+    void readIsOpen();
 
     Q_INVOKABLE void fill();
 
@@ -112,6 +118,7 @@ private:
     QSerialPort::SerialPortError m_error=QSerialPort::NoError;
     QString m_data;
     QStringList m_ports;
+    bool m_isOpen=false;
 
     //===============================
     qint32 m_tare0=0; // смещение нуля

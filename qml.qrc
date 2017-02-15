@@ -8,5 +8,6 @@
         <file>MyCalibrate.qml</file>
         <file>MySettings.qml</file>
         <file>MySettingsForm.ui.qml</file>
+        <file>MyLamp.qml</file>
     </qresource>
 </RCC>

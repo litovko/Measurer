@@ -2,6 +2,7 @@ import QtQuick 2.0
 
 Item {
     property string status_text: ""
+    property bool lamp: false
     Rectangle {
         //color: "transparent"
         anchors.fill: parent
@@ -9,6 +10,16 @@ Item {
         border.color: "#666666"
         border.width: 4
         radius: 6
+        MyLamp {
+            width: 30
+            height: 30
+            active: lamp
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            bottomText: ""
+
+        }
+
         Text {
            id:t
            color: "yellow"
