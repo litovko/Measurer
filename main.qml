@@ -141,7 +141,7 @@ ApplicationWindow {
             MyMenuItem{
                 width: r.wo
                 height: 40
-                text: "КАЛИБРОВКА [F5]"
+                text: "КАЛИБРОВКА '0'[F5]"
                 command: "CALIBRATE"
                 onButtonClicked: win.fcommand(command)
             }
@@ -233,6 +233,13 @@ ApplicationWindow {
             anchors.centerIn: parent
             onButtonClicked: win.fcommand(command)
         }
+        MyTable{
+            width: 500
+            height: 500
+            anchors.centerIn: parent
+            //lm: ["tetle: a", "b: 2"]
+        }
+
         MySettingsForm {
             id: settings
             visible: false
@@ -251,13 +258,14 @@ ApplicationWindow {
             buttonOK.onClicked: {
                 visible=false;
                 m.openSerialPort(comboBox.currentIndex);
+                m.pulley=textField.text
             }
             RegExpValidator{
                 id: num_validator
                 regExp: /(?:\d*\.)?\d+/
             }
-            textField.validator: IntValidator { bottom:5; top: 20}
-            textField.placeholderText: qsTr("Радиус шкива в мм")
+            textField.validator: IntValidator { bottom:50; top: 400}
+            textField.placeholderText: qsTr("Радиус шкива x0.1мм")
         }
     }
 }

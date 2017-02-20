@@ -9,5 +9,6 @@
         <file>MySettings.qml</file>
         <file>MySettingsForm.ui.qml</file>
         <file>MyLamp.qml</file>
+        <file>MyTable.qml</file>
     </qresource>
 </RCC>

@@ -23,6 +23,7 @@ class c_com : public QObject
     Q_PROPERTY(qreal average READ average NOTIFY averageChanged) // среднее значение веса
     Q_PROPERTY(qreal rotor READ rotor NOTIFY rotorChanged) // относительное положение ротора в градусах
     Q_PROPERTY(qreal pulley READ getPulley() WRITE setPulley NOTIFY pulleyChanged)
+    Q_PROPERTY(qreal impeller READ getImpeller() WRITE setImpeller NOTIFY impellerChanged)
     Q_PROPERTY(qreal tare0 READ tare0 NOTIFY tare0Changed) // радиус ролика
     //*******************************************
     Q_PROPERTY(QXYSeries *series READ getSeries WRITE setSeries NOTIFY seriesChanged) // серия данных для графика
@@ -74,12 +75,16 @@ public:
     bool isOpen() const;
 
 
+    qreal getImpeller() const;
+    void setImpeller(const qreal &impeller);
+
 signals:
     void nameChanged();
     void dataChanged();
     void errorChanged();
     void portsChanged();
     void pulleyChanged();
+    void impellerChanged();
     void isOpenChanged();
     //====================
     void weightChanged();
@@ -123,11 +128,12 @@ private:
     //===============================
     qint32 m_tare0=0; // смещение нуля
     qreal m_devider=1;
-    qreal m_weight;  //вес
-    qreal m_average; //средний вес
+    qreal m_weight=0;  //вес
+    qreal m_average=0; //средний вес
     //====
     qreal m_rotor=180;
-    qreal m_pulley;
+    qreal m_pulley=2.5; //Радиус шкива
+    qreal m_impeller; // Постоянная крыльчатки
 
 
 

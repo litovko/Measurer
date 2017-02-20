@@ -207,6 +207,17 @@ void c_com::fill()
 //    }
 }
 
+qreal c_com::getImpeller() const
+{
+    return m_impeller;
+}
+
+void c_com::setImpeller(const qreal &impeller)
+{
+    m_impeller = impeller;
+    emit impellerChanged();
+}
+
 
 bool c_com::isOpen() const
 {

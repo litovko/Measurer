@@ -102,6 +102,7 @@ Item {
                 y: 57
                 width: 150
                 height: 40
+                text: m.pulley
                 renderType: Text.QtRendering
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 12
@@ -113,10 +114,10 @@ Item {
                 id: label2
                 x: -4
                 y: 63
-                width: 93
+                width: 154
                 height: 27
                 color: "#e0e0e0"
-                text: qsTr("Радиус шкива, мм")
+                text: qsTr("Радиус шкива х0.1мм")
                 anchors.leftMargin: 0
                 horizontalAlignment: Text.AlignLeft
                 font.pointSize: 10
