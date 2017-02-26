@@ -1,6 +1,9 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import Gyco 1.0
+import "./table"
+import Qt.labs.settings 1.0
+
 
 //import QtQuick.Layouts 1.0
 
@@ -30,15 +33,21 @@ ApplicationWindow {
     width: 1024
     height: 768
     title: qsTr("Измеритель")
-//    background: Rectangle{
-//        color: "#000000"
-//        border.color: "#fbf837"
-//        anchors.fill: parent;
 
-
-
-//    }
-
+    property int table_rows: 3
+    property int table_columns: 3
+    Settings {
+            //category: "PPMainWindow"
+            property alias x: win.x
+            property alias y: win.y
+            property alias width: win.width
+            property alias height: win.height
+    }
+    Settings {
+            //category: "PPTable"
+            property alias table_rows: win.table_rows
+            property alias table_columns: win.table_columns
+    }
     function fcommand (cmd) {
         console.log ("COMMAND="+cmd)
         switch(cmd) {
@@ -71,7 +80,9 @@ ApplicationWindow {
           case "START":
               //m.start();
               break;
-
+          case "TABLE":
+              tbl.visible=!tbl.visible
+              break;
           case "MENU":
 
               break;
@@ -143,6 +154,13 @@ ApplicationWindow {
                 height: 40
                 text: "КАЛИБРОВКА '0'[F5]"
                 command: "CALIBRATE"
+                onButtonClicked: win.fcommand(command)
+            }
+            MyMenuItem{
+                width: r.wo
+                height: 40
+                text: "ТАБЛИЦА [F6]"
+                command: "TABLE"
                 onButtonClicked: win.fcommand(command)
             }
             MyMenuItem{
@@ -222,8 +240,23 @@ ApplicationWindow {
             height: 300
             width: 300
             anchors.right:  parent.right
+            anchors.top: parent.top
+
+        }
+        MyTable{
+            id: tbl
+            height:300
+            anchors.right: parent.right
+            anchors.left: parent.left
             anchors.bottom: status.top
-            //Component.onCompleted: {m.fill()
+            Component.onCompleted: {
+                for(var i=0;i<table_rows; i++) {
+                    addrow();
+                }
+                for( i=0;i<table_columns; i++) {
+                    addcolumn()
+                }
+            }
         }
         MyCalibrate {
             id: calibrate
@@ -232,12 +265,6 @@ ApplicationWindow {
             width: 500
             anchors.centerIn: parent
             onButtonClicked: win.fcommand(command)
-        }
-        MyTable{
-            width: 500
-            height: 500
-            anchors.centerIn: parent
-            //lm: ["tetle: a", "b: 2"]
         }
 
         MySettingsForm {

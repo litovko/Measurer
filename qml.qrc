@@ -9,6 +9,11 @@
         <file>MySettings.qml</file>
         <file>MySettingsForm.ui.qml</file>
         <file>MyLamp.qml</file>
-        <file>MyTable.qml</file>
+        <file>table/MyCellLine.qml</file>
+        <file>table/MyDataCells.qml</file>
+        <file>table/MyCellInt.qml</file>
+        <file>table/MyHeaderItem.qml</file>
+        <file>table/MyLongHeader.qml</file>
+        <file>table/MyTable.qml</file>
     </qresource>
 </RCC>

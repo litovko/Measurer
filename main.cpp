@@ -3,7 +3,7 @@
 #include <QSettings>
 #include "c_com.h"
 #define giko_name "HYCO"
-#define giko_program "Measurer"
+#define giko_program "PRIBOR"
 int main(int argc, char *argv[])
 {
     QSettings settings(giko_name, giko_program);
