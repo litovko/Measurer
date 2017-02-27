@@ -123,6 +123,7 @@ ApplicationWindow {
             if (event.key === Qt.Key_F1 || event.key === Qt.Key_1) win.fcommand("HELP")
             if (event.key === Qt.Key_F2 || event.key === Qt.Key_2) win.fcommand("START")
             if (event.key === Qt.Key_F5||event.key ===  Qt.Key_5)     win.fcommand("CALIBRATE")
+            if (event.key === Qt.Key_F6||event.key ===  Qt.Key_6)     win.fcommand("TABLE")
             if (event.key === Qt.Key_F9||event.key ===  Qt.Key_9)     win.fcommand("TARE10")
             if (event.key === Qt.Key_F10||event.key === Qt.Key_0)     win.fcommand("QUIT")
             if (event.key === Qt.Key_F11)     win.fcommand("RESET")
@@ -159,7 +160,7 @@ ApplicationWindow {
             MyMenuItem{
                 width: r.wo
                 height: 40
-                text: "ТАБЛИЦА [F6]"
+                text: "ГРАДУИР.[F6]"
                 command: "TABLE"
                 onButtonClicked: win.fcommand(command)
             }
@@ -204,6 +205,12 @@ ApplicationWindow {
             MyDigital {
                 name: "Угол :"
                 value: m.rotor*1000
+                width: 280
+                height: 40
+            }
+            MyDigital {
+                name: "Пост. К :"
+                value: m.impeller*1000
                 width: 280
                 height: 40
             }
@@ -284,15 +291,24 @@ ApplicationWindow {
             }
             buttonOK.onClicked: {
                 visible=false;
+                print ("locacl="+Qt.locale())
                 m.openSerialPort(comboBox.currentIndex);
                 m.pulley=textField.text
+                m.impeller_h=textField_h.text
+                m.impeller_d=textField_d.text
             }
             RegExpValidator{
                 id: num_validator
                 regExp: /(?:\d*\.)?\d+/
             }
-            textField.validator: IntValidator { bottom:50; top: 400}
-            textField.placeholderText: qsTr("Радиус шкива x0.1мм")
+            textField.validator: num_validator//DoubleValidator{bottom: 1; top: 10; decimals: 1}
+            textField_h.validator:  textField.validator
+            textField_d.validator:  textField.validator
+            textField.color: "lightgray"
+            textField_h.color: "lightgray"
+            textField_d.color: "lightgray"
+
+
         }
     }
 }

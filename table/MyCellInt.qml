@@ -34,13 +34,14 @@ Item {
             text: t.text
             onAccepted: { t.text=f.text; c.state="SHOW" }
             onFocusChanged: if(!focus) c.state="SHOW"
+            validator: RegExpValidator{
+                        regExp: /(?:\d*\.)?\d+/
+                       }
             Component.onCompleted:  {
-                if (celltype===1)
+                if (celltype==1)
                     validator=Qt.createQmlObject(
                       'import QtQuick 2.0;IntValidator{bottom: 1; top: 5;}',f, "validator");
-                if (celltype===2)
-                    validator=Qt.createQmlObject(
-                      'import QtQuick 2.0;DoubleValidator{bottom: 1; top: 10000; decimals: 1}',f, "validator");
+                if (celltype===-1)  validator=null;
 
 
             }

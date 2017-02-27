@@ -19,38 +19,7 @@ Item {
         id: dataline
         width: dl.width
         height: parent.height
-//        Button {
-//            id: btn
-//            width: celwidth
-//            height: dataline.height
 
-//            style: ButtonStyle {
-//                      background: Rectangle {
-//                          implicitWidth: 100
-//                          implicitHeight: 25
-//                          border.width: control.activeFocus ? 2 : 1
-//                          border.color: "lightgreen"
-//                          radius: 4
-//                          color: "transparent"
-//                          gradient: Gradient {
-//                              GradientStop { position: 0 ; color: control.pressed ? "darkgreen" : "green" }
-//                              GradientStop { position: 1 ; color: control.pressed ? "green" : "lightgreen" }
-////                              GradientStop { position: 0 ; color: control.pressed ? "#ccc" : "#eee" }
-////                              GradientStop { position: 1 ; color: control.pressed ? "#aaa" : "#ccc" }
-//                          }
-//                      }
-//                      label: Text {
-//                          anchors.fill: parent
-//                          color: "white"
-//                          text: "Удалить"
-//                          font.bold: true
-//                          verticalAlignment: Text.AlignVCenter
-//                          horizontalAlignment: Text.AlignHCenter
-//                      }
-
-//                  }
-
-//        }
         Rectangle {
             width: celwidth
             height: dataline.height
@@ -78,7 +47,7 @@ Item {
             height: dataline.height
         }
         MyCellInt {
-            celldate: "1321,5"
+            celldate: "1.1"
             celltype: 2
             width: celwidth
             height: dataline.height

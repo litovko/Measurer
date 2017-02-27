@@ -24,6 +24,8 @@ class c_com : public QObject
     Q_PROPERTY(qreal rotor READ rotor NOTIFY rotorChanged) // относительное положение ротора в градусах
     Q_PROPERTY(qreal pulley READ getPulley() WRITE setPulley NOTIFY pulleyChanged)
     Q_PROPERTY(qreal impeller READ getImpeller() WRITE setImpeller NOTIFY impellerChanged)
+    Q_PROPERTY(qreal impeller_h READ getImpeller_h() WRITE setImpeller_h NOTIFY impeller_hChanged)
+    Q_PROPERTY(qreal impeller_d READ getImpeller_d() WRITE setImpeller_d NOTIFY impeller_dChanged)
     Q_PROPERTY(qreal tare0 READ tare0 NOTIFY tare0Changed) // радиус ролика
     //*******************************************
     Q_PROPERTY(QXYSeries *series READ getSeries WRITE setSeries NOTIFY seriesChanged) // серия данных для графика
@@ -78,6 +80,12 @@ public:
     qreal getImpeller() const;
     void setImpeller(const qreal &impeller);
 
+    qreal getImpeller_h() const;
+    void setImpeller_h(const qreal &impeller_h);
+
+    qreal getImpeller_d() const;
+    void setImpeller_d(const qreal &impeller_d);
+
 signals:
     void nameChanged();
     void dataChanged();
@@ -85,6 +93,9 @@ signals:
     void portsChanged();
     void pulleyChanged();
     void impellerChanged();
+    void impeller_hChanged();
+    void impeller_dChanged();
+
     void isOpenChanged();
     //====================
     void weightChanged();
@@ -107,6 +118,7 @@ public slots:
     void readData();
     void readError();
     void readIsOpen();
+    void calcImpeller();
 
     Q_INVOKABLE void fill();
 
@@ -134,7 +146,8 @@ private:
     qreal m_rotor=180;
     qreal m_pulley=2.5; //Радиус шкива
     qreal m_impeller; // Постоянная крыльчатки
-
+    qreal m_impeller_h=3.0; // Высота крыльчатки
+    qreal m_impeller_d=2.5; // Диаметр крыльчатки
 
 
     //==

@@ -11,12 +11,14 @@ c_com::c_com(QObject *parent) : QObject(parent), series(NULL)
     connect(this,SIGNAL(seriesChanged()), this, SLOT(fill()));
     connect(m_serial, SIGNAL(error(QSerialPort::SerialPortError)),
             this, SLOT(readError()));
-    connect(m_serial, SIGNAL(aboutToClose()),
-            this, SLOT(readIsOpen()));
+    connect(m_serial, SIGNAL(aboutToClose()), this, SLOT(readIsOpen()));
+    connect(this, SIGNAL(impeller_hChanged()), this, SLOT(calcImpeller()));
+    connect(this, SIGNAL(impeller_dChanged()), this, SLOT(calcImpeller()));
     fill();
     //setPulley(2.5);
     listPorts();
     readSettings();
+    calcImpeller();
 
 }
 
@@ -34,7 +36,8 @@ void c_com::saveSettings()
     settings.setValue("PulleyRadius",getPulley());
     settings.setValue("TareWeight",tare0());
     settings.setValue("Devider",devider());
-
+    settings.setValue("HImpeller",getImpeller_h());
+    settings.setValue("DImpeller",getImpeller_d());
 }
 
 void c_com::readSettings()
@@ -45,6 +48,8 @@ void c_com::readSettings()
     setPulley(settings.value("PulleyRadius",2.1).toReal());
     setTare0(settings.value("TareWeight",0.0).toReal());
     setDevider(settings.value("Devider",1.0).toReal());
+    setImpeller_h(settings.value("HImpeller",1.0).toReal());
+    setImpeller_d(settings.value("DImpeller",1.0).toReal());
 }
 
 
@@ -196,6 +201,14 @@ void c_com::readIsOpen()
     emit isOpenChanged();
 }
 
+void c_com::calcImpeller()
+{
+    setImpeller(M_PI*m_impeller_d*m_impeller_d/2.0*(m_impeller_d/6.0+m_impeller_h));
+    qDebug()<<"imp="<<M_PI<<"*"<<m_impeller_d*m_impeller_d;
+    qDebug()<<"imp="<<m_impeller;
+    emit impellerChanged();
+}
+
 void c_com::fill()
 {
     ;
@@ -205,6 +218,28 @@ void c_com::fill()
 //    {
 //        series->append(i, 0.0);
 //    }
+}
+
+qreal c_com::getImpeller_d() const
+{
+    return m_impeller_d;
+}
+
+void c_com::setImpeller_d(const qreal &impeller_d)
+{
+    m_impeller_d = impeller_d;
+    emit impeller_dChanged();
+}
+
+qreal c_com::getImpeller_h() const
+{
+    return m_impeller_h;
+}
+
+void c_com::setImpeller_h(const qreal &impeller_h)
+{
+    m_impeller_h = impeller_h;
+    emit impeller_hChanged();
 }
 
 qreal c_com::getImpeller() const
