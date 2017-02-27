@@ -8,7 +8,10 @@ Item {
     property int colnumber: 0
     property int rownumber: 0
     property alias children: datarows.children
-    property real rad: 2
+    property real rad: 0
+    property real imp_h: 0
+    property real imp_d: 0
+    property real imp: 1
     function addcolumn(){ //добавляем одну колонку во все строки в хэдер
         if (!rownumber) return;
         for(var i=0; i<datarows.children.length;i++) {
@@ -29,6 +32,10 @@ Item {
             'MyCellLine {
                 width: header.width
                 height: 40
+                radius_R: mt.rad
+                imp: mt.imp
+                imp_h: mt.imp_h
+                imp_d: mt.imp_d
             }',datarows, "dynamicRow");
         newObject.number=rownumber
 //        rownumber+=1

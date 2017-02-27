@@ -4,15 +4,18 @@ import QtQuick.Controls.Styles 1.4
 
 Item {
     id: c
-    //property int digit: 0
     property string celldate: ""
-    property int celltype : 0 //1-int 2-real -1 - не редактируемый
+    property int celltype : 0 //1-int 2-real -1 - c датчика 3 - 0 - вычисляемый
     signal changed
+    onCelldateChanged: {
+        if (celltype===0) console.log("C="+celldate+" "+t.text)
+    }
+    function bw() {if (celltype===0)return 1; return 3}
     Rectangle {
         id: r
         anchors.fill: parent
         color: "transparent"
-        border.width: ma.containsMouse?3:1
+        border.width: ma.containsMouse?bw():1
         border.color: "lightblue"
         Text {
             id: t
@@ -20,7 +23,7 @@ Item {
             color: "#e7ee90"
 
             font.pointSize: 9
-            text: celldate
+            text: c.celldate
             font.bold: true
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
@@ -32,7 +35,7 @@ Item {
             font.pixelSize: 14
             font.bold: true
             text: t.text
-            onAccepted: { t.text=f.text; c.state="SHOW" }
+            onAccepted: { c.celldate=f.text; c.state="SHOW" }
             onFocusChanged: if(!focus) c.state="SHOW"
             validator: RegExpValidator{
                         regExp: /(?:\d*\.)?\d+/
@@ -42,6 +45,7 @@ Item {
                     validator=Qt.createQmlObject(
                       'import QtQuick 2.0;IntValidator{bottom: 1; top: 5;}',f, "validator");
                 if (celltype===-1)  validator=null;
+
 
 
             }
@@ -75,8 +79,8 @@ Item {
             id: ma
             anchors.fill: parent
             hoverEnabled: true
-            onClicked: if(c.celltype>=0)c.state=c.state==="EDIT"?"SHOW":"EDIT"
-                       else { t.text=c.celldate=m.weight; c.changed();}
+            onClicked: if(c.celltype>0)c.state=c.state==="EDIT"?"SHOW":"EDIT"
+                       else if(c.celltype<0) {t.text=c.celldate=m.weight; c.changed();}
         }
 
     }

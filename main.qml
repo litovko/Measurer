@@ -34,8 +34,8 @@ ApplicationWindow {
     height: 768
     title: qsTr("Измеритель")
 
-    property int table_rows: 3
-    property int table_columns: 3
+    property int table_rows: 7
+    property int table_columns: 7
     Settings {
             //category: "PPMainWindow"
             property alias x: win.x
@@ -252,7 +252,7 @@ ApplicationWindow {
         }
         MyTable{
             id: tbl
-            height:300
+            height:400
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.bottom: status.top
@@ -264,6 +264,10 @@ ApplicationWindow {
                     addcolumn()
                 }
             }
+            rad: m.pulley
+            imp_d: m.impeller_d
+            imp_h: m.impeller_h
+            imp: m.impeller
         }
         MyCalibrate {
             id: calibrate
@@ -293,7 +297,7 @@ ApplicationWindow {
                 visible=false;
                 print ("locacl="+Qt.locale())
                 m.openSerialPort(comboBox.currentIndex);
-                m.pulley=textField.text
+                m.pulley=textField.text;
                 m.impeller_h=textField_h.text
                 m.impeller_d=textField_d.text
             }
