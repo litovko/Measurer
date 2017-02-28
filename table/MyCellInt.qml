@@ -5,12 +5,15 @@ import QtQuick.Controls.Styles 1.4
 Item {
     id: c
     property string celldate: ""
-    property int celltype : 0 //1-int 2-real -1 - c датчика 3 - 0 - вычисляемый
+    property int celltype : 0 //1-int 2-real -1 - c датчика 3 - просто текст 0 - вычисляемый
     signal changed
     onCelldateChanged: {
         if (celltype===0) console.log("C="+celldate+" "+t.text)
     }
     function bw() {if (celltype===0)return 1; return 3}
+    function makedatastring() {
+        return celldate
+    }
     Rectangle {
         id: r
         anchors.fill: parent
@@ -37,7 +40,7 @@ Item {
             text: t.text
             onAccepted: { c.celldate=f.text; c.state="SHOW" }
             onFocusChanged: if(!focus) c.state="SHOW"
-            validator: RegExpValidator{
+            validator: RegExpValidator{ //по умолчанию можем вводить вещественные числа
                         regExp: /(?:\d*\.)?\d+/
                        }
             Component.onCompleted:  {
@@ -45,6 +48,7 @@ Item {
                     validator=Qt.createQmlObject(
                       'import QtQuick 2.0;IntValidator{bottom: 1; top: 5;}',f, "validator");
                 if (celltype===-1)  validator=null;
+                if (celltype===3)  validator=null;
 
 
 

@@ -21,7 +21,12 @@ Item {
         moment.celldate=(mm.celldate*1.0*dl.radius_R).toFixed(2)
         res.celldate=(moment.celldate/dl.imp).toFixed(2)
     }
-
+    function makedatastring() {
+        var s=""
+        for (var i=1; i<dataline.children.length; i++)
+        s=s+i+"':'"+dataline.children[i].makedatastring()+"'; "
+        return s
+    }
     onRadius_RChanged:  update()
 
     onImpChanged:       update()

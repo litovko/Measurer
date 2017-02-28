@@ -40,6 +40,7 @@ Item {
         newObject.number=rownumber
 //        rownumber+=1
         for (var i=0;i<colnumber; i++) newObject.addcolumn()
+        print(makedatastring())
     }
     function delrow(num){
         datarows.children[num].destroy()
@@ -47,6 +48,18 @@ Item {
     function getrow(num) {
         return datarows.children[num]
     }
+    function makedatastring() {
+        var s=""
+        s="'Радиус крыльчатки':'"+rad+"';'Высота крыльчатки':'"+imp_h+"';'Диаметр крыльчатки':'"+imp_d+"';'Количество строк':'"+rownumber +"';'Количество колонок':'"+colnumber
+        s=s+"'\n"
+
+        for (var i=0; i<datarows.children.length; i++)
+        s=s+datarows.children[i].makedatastring()+"\n"
+
+
+        return s
+    }
+
 
     Rectangle {
         id: rect

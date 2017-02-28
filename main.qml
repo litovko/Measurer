@@ -20,6 +20,9 @@ import Qt.labs.settings 1.0
 // - радиус ролика
 // - вес груза
 // - значение, соответствующее весу груза
+// - диаметр крыльчатки
+// - высота крыльчатки
+// - постоянная крыльчатки - вычисляемое значение
 
 // График измерения усилия по результатам калибровки
 // График тау по результатам калибровки
@@ -118,6 +121,19 @@ ApplicationWindow {
         radius: 10
         anchors.fill: parent
         focus: true
+        state: "MAIN"
+        states: [
+            State {
+                name: "MAIN"
+                //PropertyChanges { target: tbl; visible: false; }
+                PropertyChanges { target: settings; visible: false; }
+            },
+            State {
+                name: "GRAD"
+                PropertyChanges { target: grad; visible: true;}
+                PropertyChanges { target: settings; visible: false; }
+            }
+        ]
         Keys.onPressed: {
             console.log("KEY:"+event.key)
             if (event.key === Qt.Key_F1 || event.key === Qt.Key_1) win.fcommand("HELP")
@@ -250,25 +266,7 @@ ApplicationWindow {
             anchors.top: parent.top
 
         }
-        MyTable{
-            id: tbl
-            height:400
-            anchors.right: parent.right
-            anchors.left: parent.left
-            anchors.bottom: status.top
-            Component.onCompleted: {
-                for(var i=0;i<table_rows; i++) {
-                    addrow();
-                }
-                for( i=0;i<table_columns; i++) {
-                    addcolumn()
-                }
-            }
-            rad: m.pulley
-            imp_d: m.impeller_d
-            imp_h: m.impeller_h
-            imp: m.impeller
-        }
+
         MyCalibrate {
             id: calibrate
             visible: false
@@ -311,8 +309,12 @@ ApplicationWindow {
             textField.color: "lightgray"
             textField_h.color: "lightgray"
             textField_d.color: "lightgray"
-
-
+        }
+        MyGraduator {
+            id: grad
+            height: 600
+            width: 1000
+            anchors.centerIn: parent
         }
     }
 }

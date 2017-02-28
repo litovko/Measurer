@@ -25,6 +25,12 @@ Item {
         }
         return s/dataset.children.length
     }
+    function makedatastring() {
+        var s=""
+        for (var i=0; i<dataset.children.length; i++)
+        s=s+i+":'"+dataset.children[i].makedatastring()+"'; "
+        return s
+    }
 
     onCountChanged: {
         print("Data cell count changed="+count)
