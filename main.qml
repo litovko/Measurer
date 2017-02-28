@@ -37,20 +37,15 @@ ApplicationWindow {
     height: 768
     title: qsTr("Измеритель")
 
-    property int table_rows: 7
-    property int table_columns: 7
+
     Settings {
-            //category: "PPMainWindow"
+            category: "MainWindow"
             property alias x: win.x
             property alias y: win.y
             property alias width: win.width
             property alias height: win.height
     }
-    Settings {
-            //category: "PPTable"
-            property alias table_rows: win.table_rows
-            property alias table_columns: win.table_columns
-    }
+
     function fcommand (cmd) {
         console.log ("COMMAND="+cmd)
         switch(cmd) {

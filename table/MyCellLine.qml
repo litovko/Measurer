@@ -11,6 +11,10 @@ Item {
     property real imp_h: 1.0
     property real imp_d: 1.0
     property real imp: 1
+    //property string dataset: ""
+    property alias weightname: w.celldata
+    property alias weight: mm.celldata
+    property alias datalinerow: dataline
     function addcolumn(){
         dc.addcolumn("-")
     }
@@ -18,21 +22,21 @@ Item {
         dc.delcolumn(num)
     }
     function update(){
-        moment.celldate=(mm.celldate*1.0*dl.radius_R).toFixed(2)
-        res.celldate=(moment.celldate/dl.imp).toFixed(2)
+        moment.celldata=(mm.celldata*1.0*dl.radius_R).toFixed(2)
+        res.celldata=(moment.celldata/dl.imp).toFixed(2)
+        //dl.dataset=dl.makedatastring()
     }
-    function makedatastring() {
+    function getdata() {
         var s=""
         for (var i=1; i<dataline.children.length; i++)
-        s=s+i+"':'"+dataline.children[i].makedatastring()+"'; "
+        s=s+dataline.children[i].celldate+"; "
+        print ("MyCellLine.getdata="+s)
         return s
     }
     onRadius_RChanged:  update()
 
     onImpChanged:       update()
 
-
-    //Component.onCompleted: addcolumn("+")
     Row {
         id: dataline
         width: dl.width
@@ -53,36 +57,37 @@ Item {
         }
 
         MyCellInt {// номер строки таблицы
-            celldate: dl.number
+            celldata: dl.number
             celltype: 1
             width: celwidth
             height: dataline.height
         }
         MyCellInt {// название груза
-            celldate: "1+пл."
+            id: w
+            celldata: dl.number
             celltype: 3
             width: celwidth
             height: dataline.height
         }
         MyCellInt { //вес гирь
             id: mm
-            celldate: "1.1"
+            celldata: "0"
             celltype: 2
             width: celwidth
             height: dataline.height
-            onCelldateChanged: dl.update()
+            onCelldataChanged: dl.update()
 
         }
         MyCellInt { //момент
             id: moment
-            celldate: (mm.celldate*1.0*dl.radius_R).toFixed(2)
+            celldata: (mm.celldata*1.0*dl.radius_R).toFixed(2)
             celltype: 0
             width: celwidth
             height: dataline.height
         }
         MyCellInt { //сопротивл. вр. срезу
             id: res
-            celldate: moment.celldate/dl.imp
+            celldata: moment.celldata/dl.imp
             celltype: 0
             width: celwidth
             height: dataline.height
@@ -91,11 +96,14 @@ Item {
             id: dc
             width: longcelwidth
             height: dataline.height
-            onChanged: avrg.celldate=dc.average().toFixed(1)
+            onChanged: {
+                //dl.dataset=dl.makedatastring()
+                avrg.celldata=dc.average().toFixed(1)
+            }
         }
         MyCellInt {
             id: avrg
-            celldate: "-"
+            celldata: "-"
             celltype: 0
             width: celwidth
             height: dataline.height

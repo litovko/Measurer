@@ -7,7 +7,7 @@ Item {
     function addcolumn(dat) {
         var newObject = Qt.createQmlObject(
             'MyCellInt {
-                celldate: "'+dat+'"
+                celldata: "'+dat+'"
                 celltype: -1
                 width: d.width/dataset.children.length
                 height: dataline.height
@@ -25,17 +25,18 @@ Item {
         }
         return s/dataset.children.length
     }
-    function makedatastring() {
+    function getdata() {
         var s=""
         for (var i=0; i<dataset.children.length; i++)
-        s=s+i+":'"+dataset.children[i].makedatastring()+"'; "
+        s=s+dataset.children[i].makedatastring()+";"
+        s.length=s.length-1
         return s
     }
 
-    onCountChanged: {
-        print("Data cell count changed="+count)
-        for(var i=0;i<dataset.children.length;i++) print("i:"+i+"="+dataset.children[i].celldate);
-    }
+//    onCountChanged: {
+//        print("Data cell count changed="+count)
+//        for(var i=0;i<dataset.children.length;i++) print("i:"+i+"="+dataset.children[i].celldate);
+//    }
     Rectangle {
         anchors.fill: parent
         border.color: "lightblue"

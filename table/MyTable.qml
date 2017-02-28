@@ -12,6 +12,8 @@ Item {
     property real imp_h: 0
     property real imp_d: 0
     property real imp: 1
+    //property string dataset: ""
+    property int maxrow: 7
     function addcolumn(){ //добавляем одну колонку во все строки в хэдер
         if (!rownumber) return;
         for(var i=0; i<datarows.children.length;i++) {
@@ -27,6 +29,7 @@ Item {
         lh.delcolumn(num);
         colnumber-=1
     }
+
     function addrow(){
         var newObject = Qt.createQmlObject(
             'MyCellLine {
@@ -37,10 +40,9 @@ Item {
                 imp_h: mt.imp_h
                 imp_d: mt.imp_d
             }',datarows, "dynamicRow");
-        newObject.number=rownumber
-//        rownumber+=1
+        newObject.number=datarows.children.length
         for (var i=0;i<colnumber; i++) newObject.addcolumn()
-        print(makedatastring())
+        //print(makedatastring())
     }
     function delrow(num){
         datarows.children[num].destroy()
@@ -48,18 +50,18 @@ Item {
     function getrow(num) {
         return datarows.children[num]
     }
-    function makedatastring() {
+    function getdata() {
         var s=""
-        s="'Радиус крыльчатки':'"+rad+"';'Высота крыльчатки':'"+imp_h+"';'Диаметр крыльчатки':'"+imp_d+"';'Количество строк':'"+rownumber +"';'Количество колонок':'"+colnumber
-        s=s+"'\n"
+//        s="'Радиус крыльчатки':'"+rad+"';'Высота крыльчатки':'"+imp_h+"';'Диаметр крыльчатки':'"+imp_d+"';'Количество строк':'"+rownumber +"';'Количество колонок':'"+colnumber
+//        s=s+"'\r"
 
         for (var i=0; i<datarows.children.length; i++)
-        s=s+datarows.children[i].makedatastring()+"\n"
-
-
+        s=s+datarows.children[i].getdata()+"\r"
         return s
     }
-
+    function setcell(i,j,val){
+        datarows.children[i].datalinerow.children[j].celldata=val
+    }
 
     Rectangle {
         id: rect
@@ -74,7 +76,6 @@ Item {
             anchors.margins: 5
             anchors.left: parent.left
             anchors.top: parent.top
-
             Rectangle {
                 width: 90
                 height: 80
@@ -83,9 +84,8 @@ Item {
                 MyMenuItem{
                   anchors.fill: parent
                   anchors.margins: 6
-
                   text: "Добавить"
-                  onButtonClicked: addrow()
+                  onButtonClicked: if(rownumber<maxrow) addrow()
                 }
             }
 

@@ -4,15 +4,18 @@ import QtQuick.Controls.Styles 1.4
 
 Item {
     id: c
-    property string celldate: ""
+    property string celldata: ""
     property int celltype : 0 //1-int 2-real -1 - c датчика 3 - просто текст 0 - вычисляемый
     signal changed
-    onCelldateChanged: {
-        if (celltype===0) console.log("C="+celldate+" "+t.text)
+    onCelldataChanged: {
+        //if (celltype===0) {
+            t.text=c.celldata
+            console.log("C="+celldata+" "+t.text)
+        //}
     }
     function bw() {if (celltype===0)return 1; return 3}
     function makedatastring() {
-        return celldate
+        return celldata
     }
     Rectangle {
         id: r
@@ -26,7 +29,7 @@ Item {
             color: "#e7ee90"
 
             font.pointSize: 9
-            text: c.celldate
+            text: c.celldata
             font.bold: true
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
@@ -38,7 +41,7 @@ Item {
             font.pixelSize: 14
             font.bold: true
             text: t.text
-            onAccepted: { c.celldate=f.text; c.state="SHOW" }
+            onAccepted: { c.celldata=f.text; c.state="SHOW" }
             onFocusChanged: if(!focus) c.state="SHOW"
             validator: RegExpValidator{ //по умолчанию можем вводить вещественные числа
                         regExp: /(?:\d*\.)?\d+/
@@ -84,7 +87,7 @@ Item {
             anchors.fill: parent
             hoverEnabled: true
             onClicked: if(c.celltype>0)c.state=c.state==="EDIT"?"SHOW":"EDIT"
-                       else if(c.celltype<0) {t.text=c.celldate=m.weight; c.changed();}
+                       else if(c.celltype<0) {t.text=c.celldata=m.weight; c.changed();}
         }
 
     }
