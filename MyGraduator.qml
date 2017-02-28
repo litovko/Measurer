@@ -1,14 +1,39 @@
 import QtQuick 2.0
 import "./table"
+import QtQuick.Dialogs 1.2
 
 Item {
+    id: gr
+    property string fname: "tbl.csv"
+    property int maxrow : 7
     Rectangle {
+
+        Settings {
+            //category: "PPGraduator"
+            property alias fname: gr.fname
+            property alias maxrow: gr.maxrow
+
+        }
         anchors.margins: 5
         anchors.fill: parent
         color: "black"
         border.color: "lightgray"
         border.width: 2
         radius: 5
+        FileDialog {
+            id: fileDialog
+            title: "Please choose a file"
+            folder: shortcuts.home
+            onAccepted: {
+                console.log("You chose: " + fileDialog.fileUrls)
+                Qt.quit()
+            }
+            onRejected: {
+                console.log("Canceled")
+                Qt.quit()
+            }
+            Component.onCompleted: visible = true
+        }
         Text {
             width: 200
             height: 20
