@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import "./table"
 import QtQuick.Dialogs 1.2
+import Qt.labs.settings 1.0
 
 Item {
     id: gr
