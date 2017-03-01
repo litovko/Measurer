@@ -5,23 +5,21 @@ import Qt.labs.settings 1.0
 
 Item {
     id: gr
-    property string fname: "tbl.csv"
+
     property alias maxrow : tbl.maxrow
     property string dataset: ""
 
     property int table_rows: 7
     property int table_columns: 7
+    state: "Таблица"
     Settings {
         category: "Graduator"
-        property alias fname: gr.fname
         property alias maxrow: tbl.maxrow
         property alias dataset: gr.dataset
         property alias table_rows: gr.table_rows
         property alias table_columns: gr.table_columns
     }
     Rectangle {
-
-
         anchors.margins: 5
         anchors.fill: parent
         color: "black"
@@ -58,6 +56,24 @@ Item {
                     dataset=tbl.getdata()
                 }
             }
+            MyMenuItem {
+                width: 200
+                height: 40
+                text: "Таблица/График"
+                command: "ПЕРЕКЛ"
+                onButtonClicked: {
+                   gr.state=gr.state==="Таблица"?"График":"Таблица"
+                }
+            }
+            MyMenuItem {
+                width: 200
+                height: 40
+                text: "Закрыть"
+                command: "ЗАКРЫТЬ"
+                onButtonClicked: {
+                   mainrect.state="MAIN"
+                }
+            }
         }
         MyTable{
             id: tbl
@@ -82,22 +98,22 @@ Item {
                 i=0; var j=0
                 while (s>0) {
                     var sbstr=str.substring(0,s)
-                    print("s="+s)
-                    print("substr="+sbstr)
-                    i++
                     str=str.substring(s+1,str.length)
-                    print("str="+str)
+                    print("i="+i)
                     s=str.indexOf("\r",0)
                     var sl=sbstr.split(";");  print("sl="+sl)
-                }
+                        setcell(i,1,sl[0].trim());
+                        setcell(i,2,sl[1]);
+                        setcell(i,3,sl[2].trim());
+                        setcell(i,6,sl[5].trim());
 
+                    i++
+                }
                 print("01234567890123456789012345678901234567890")
                 print(dataset)
                 print(s);
-
-
-
-                setcell(2,2,10)
+                //setcell(2,2,10)
+                //setcell(2,6,"1/2/3/4/5/6/7/8")
             }
             rad: m.pulley
             imp_d: m.impeller_d
@@ -110,9 +126,11 @@ Item {
     states: [
         State {
             name: "Таблица"
+            PropertyChanges { target: tbl; visible: true; }
         },
         State {
             name: "График"
+            PropertyChanges { target: tbl; visible: false; }
         }
     ]
 

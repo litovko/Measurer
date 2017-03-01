@@ -14,9 +14,13 @@ Item {
         //}
     }
     function bw() {if (celltype===0)return 1; return 3}
-    function makedatastring() {
+    function getdata() {
         return celldata
     }
+    function setdata(d) {
+        celldata=d
+    }
+
     Rectangle {
         id: r
         anchors.fill: parent

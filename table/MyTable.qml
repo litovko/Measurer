@@ -54,13 +54,12 @@ Item {
         var s=""
 //        s="'Радиус крыльчатки':'"+rad+"';'Высота крыльчатки':'"+imp_h+"';'Диаметр крыльчатки':'"+imp_d+"';'Количество строк':'"+rownumber +"';'Количество колонок':'"+colnumber
 //        s=s+"'\r"
-
         for (var i=0; i<datarows.children.length; i++)
         s=s+datarows.children[i].getdata()+"\r"
         return s
     }
     function setcell(i,j,val){
-        datarows.children[i].datalinerow.children[j].celldata=val
+        datarows.children[i].datalinerow.children[j].setdata(val)
     }
 
     Rectangle {

@@ -29,7 +29,7 @@ Item {
     function getdata() {
         var s=""
         for (var i=1; i<dataline.children.length; i++)
-        s=s+dataline.children[i].celldate+"; "
+        s=s+dataline.children[i].celldata+"; "
         print ("MyCellLine.getdata="+s)
         return s
     }
@@ -96,14 +96,14 @@ Item {
             id: dc
             width: longcelwidth
             height: dataline.height
-            onChanged: {
-                //dl.dataset=dl.makedatastring()
-                avrg.celldata=dc.average().toFixed(1)
-            }
+//            onChanged: {
+//                //dl.dataset=dl.makedatastring()
+//                avrg.celldata=dc.average().toFixed(1)
+//            }
         }
         MyCellInt {
             id: avrg
-            celldata: "-"
+            celldata: dc.average
             celltype: 0
             width: celwidth
             height: dataline.height

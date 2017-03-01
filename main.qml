@@ -73,13 +73,13 @@ ApplicationWindow {
               m.reset();
               break;
           case "SETTINGS":
-              settings.visible=true;
+              mainrect.state="SETTINGS"
               break;
           case "START":
               //m.start();
               break;
           case "TABLE":
-              tbl.visible=!tbl.visible
+              mainrect.state="GRAD"
               break;
           case "MENU":
 
@@ -110,6 +110,7 @@ ApplicationWindow {
     }
 
     Rectangle{
+        id: mainrect
         color: "#000000"
         border.color: "yellow"
         border.width: 3
@@ -121,12 +122,30 @@ ApplicationWindow {
             State {
                 name: "MAIN"
                 //PropertyChanges { target: tbl; visible: false; }
+                PropertyChanges { target: grad; visible: false;}
                 PropertyChanges { target: settings; visible: false; }
+                PropertyChanges { target: m_set; visible: true; }
+                PropertyChanges { target: m_st; visible: true; }
+                PropertyChanges { target: m_grad; visible: true; }
+                PropertyChanges { target: m_cal; visible: true; }
             },
             State {
                 name: "GRAD"
                 PropertyChanges { target: grad; visible: true;}
                 PropertyChanges { target: settings; visible: false; }
+                PropertyChanges { target: m_set; visible: true; }
+                PropertyChanges { target: m_st; visible: true; }
+                PropertyChanges { target: m_grad; visible: true; }
+                PropertyChanges { target: m_cal; visible: true; }
+            },
+            State {
+                name: "SETTINGS"
+                PropertyChanges { target: grad; visible: false;}
+                PropertyChanges { target: settings; visible: true; }
+                PropertyChanges { target: m_set; visible: true; }
+                PropertyChanges { target: m_st; visible: true; }
+                PropertyChanges { target: m_grad; visible: true; }
+                PropertyChanges { target: m_cal; visible: true; }
             }
         ]
         Keys.onPressed: {
@@ -155,6 +174,7 @@ ApplicationWindow {
             spacing: 20
             readonly  property int wo: 160
             MyMenuItem{
+                id: m_st
                 width: r.wo
                 height: 40
                 text: "СТАРТ [F2]"
@@ -162,6 +182,7 @@ ApplicationWindow {
                 onButtonClicked: win.fcommand(command)
             }
             MyMenuItem{
+                id: m_cal
                 width: r.wo
                 height: 40
                 text: "КАЛИБРОВКА '0'[F5]"
@@ -169,6 +190,7 @@ ApplicationWindow {
                 onButtonClicked: win.fcommand(command)
             }
             MyMenuItem{
+                id: m_grad
                 width: r.wo
                 height: 40
                 text: "ГРАДУИР.[F6]"
@@ -176,6 +198,7 @@ ApplicationWindow {
                 onButtonClicked: win.fcommand(command)
             }
             MyMenuItem{
+                id: m_set
                 width: r.wo
                 height: 40
                 text: "НАСТРОЙКА [F8]"
