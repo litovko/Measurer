@@ -2,6 +2,7 @@
 #include <qdebug.h>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QSettings>
+#include <QtGlobal>
 c_com::c_com(QObject *parent) : QObject(parent), series(NULL)
 {
     m_serial = new QSerialPort(this);
@@ -55,7 +56,7 @@ void c_com::readSettings()
 
 void c_com::filltableseries()
 {
-    qreal x,y;
+    qreal x,y, minx=1000000, maxx=0, miny=1000000, maxy=0;
     bool ok;
     qDebug()<<"filltableseries";
     QStringList qs=m_tabledata.split(13);
@@ -65,13 +66,19 @@ void c_com::filltableseries()
     foreach(QString item, qs) {
         QStringList dl=item.split(";");
         if (dl.length()<6) break;
-        qDebug()<<dl.length();
-        x=dl.at(4).toDouble(&ok);
-        y=dl.at(6).toDouble(&ok);
+        //qDebug()<<dl.length();
+        x=dl.at(4).toDouble(&ok); minx=qMin(minx, x); maxx=qMax(maxx, x);
+        y=dl.at(6).toDouble(&ok); miny=qMin(miny, y); maxy=qMax(maxy, y);
         qDebug()<<x<<"--"<<y;
         tableseries->append(x,y);
     }
-    qDebug()<<"SER"<<tableseries->children();
+    qDebug()<<"Axes"<<tableseries->attachedAxes().length();
+    if (tableseries->attachedAxes().length()<2) return;
+    tableseries->attachedAxes()[0]->setMin(minx);
+    tableseries->attachedAxes()[1]->setMin(miny);
+    tableseries->attachedAxes()[0]->setMax(maxx);
+    tableseries->attachedAxes()[1]->setMax(maxy);
+    //qDebug()<<"SER"<<tableseries->children();
 }
 
 
@@ -114,12 +121,12 @@ void c_com::listPorts()
     m_ports.clear();
     const auto infos = QSerialPortInfo::availablePorts();
     for (const QSerialPortInfo &info: infos) {
-    qDebug() << "Name : " << info.portName();
-    qDebug() << "Description : " << info.description();
-    qDebug() << "Manufacturer: " << info.manufacturer();
+    //qDebug() << "Name : " << info.portName();
+    //qDebug() << "Description : " << info.description();
+    //qDebug() << "Manufacturer: " << info.manufacturer();
     m_ports.append(info.portName());
     }
-    qDebug()<<"com ports available:"<<m_ports;
+    //qDebug()<<"com ports available:"<<m_ports;
     emit portsChanged();
 }
 
@@ -165,7 +172,7 @@ void c_com::readData()
 
         m_stat->addPoint(r,w);
         setRotor(r);
-        qDebug()<<"r="<<r<<"w="<<w;
+        //qDebug()<<"r="<<r<<"w="<<w;
         return;
 
     }
@@ -210,7 +217,7 @@ void c_com::readError()
     m_error=m_serial->error();
     if (m_error) {
         m_isOpen=false; emit isOpenChanged();
-         qDebug()<<"IsOpen:"<<m_isOpen;
+        // qDebug()<<"IsOpen:"<<m_isOpen;
     }
     qDebug()<<"Error:"<<m_error;
     emit errorChanged();
@@ -219,15 +226,15 @@ void c_com::readError()
 void c_com::readIsOpen()
 {
     m_isOpen=false;
-    qDebug()<<"IsOpen:"<<m_isOpen;
+    //qDebug()<<"IsOpen:"<<m_isOpen;
     emit isOpenChanged();
 }
 
 void c_com::calcImpeller()
 {
     setImpeller(M_PI*m_impeller_d*m_impeller_d/2.0*(m_impeller_d/6.0+m_impeller_h));
-    qDebug()<<"imp="<<M_PI<<"*"<<m_impeller_d*m_impeller_d;
-    qDebug()<<"imp="<<m_impeller;
+    //qDebug()<<"imp="<<M_PI<<"*"<<m_impeller_d*m_impeller_d;
+    //qDebug()<<"imp="<<m_impeller;
     emit impellerChanged();
 }
 
@@ -431,7 +438,7 @@ void c_com::setName(const QString &name)
 {
     m_name = name;
     int i=m_ports.indexOf(m_name,0);
-    qDebug()<<"i="<<i<<"m_name:"<<m_name;
+    //qDebug()<<"i="<<i<<"m_name:"<<m_name;
     if (i>0) openSerialPort(i);
     emit nameChanged();
 }

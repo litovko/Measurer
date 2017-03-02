@@ -30,6 +30,9 @@ Item {
                 capStyle: Qt.RoundCap
                 color: "green"
                 width: 2
+                pointLabelsVisible: true
+                pointsVisible: true
+                pointLabelsColor: "yellow"
                 ValueAxis {
                         id: axisX
                         min: 0
@@ -48,6 +51,7 @@ Item {
                       gridVisible: true
                       labelsColor: "white"
                       color: "white"
+                      labelsVisible: true
                   }
                 axisX: axisX
                 axisY: axisY
