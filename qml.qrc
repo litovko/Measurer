@@ -16,5 +16,6 @@
         <file>table/MyLongHeader.qml</file>
         <file>table/MyTable.qml</file>
         <file>MyGraduator.qml</file>
+        <file>MyChartGrad.qml</file>
     </qresource>
 </RCC>

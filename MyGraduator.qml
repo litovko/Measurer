@@ -11,6 +11,7 @@ Item {
 
     property int table_rows: 7
     property int table_columns: 7
+    property alias chart: chart
     state: "Таблица"
     Settings {
         category: "Graduator"
@@ -119,18 +120,25 @@ Item {
             imp_d: m.impeller_d
             imp_h: m.impeller_h
             imp: m.impeller
-
-
+        }
+        MyChartGrad {
+            id: chart
+            height:400
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
         }
     }
     states: [
         State {
             name: "Таблица"
             PropertyChanges { target: tbl; visible: true; }
+             PropertyChanges { target: chart; visible: false; }
         },
         State {
             name: "График"
             PropertyChanges { target: tbl; visible: false; }
+             PropertyChanges { target: chart; visible: true; }
         }
     ]
 

@@ -29,6 +29,8 @@ class c_com : public QObject
     Q_PROPERTY(qreal tare0 READ tare0 NOTIFY tare0Changed) // радиус ролика
     //*******************************************
     Q_PROPERTY(QXYSeries *series READ getSeries WRITE setSeries NOTIFY seriesChanged) // серия данных для графика
+    Q_PROPERTY(QXYSeries *tablseries READ getTableseries WRITE setTableseries NOTIFY tableseriesChanged) // серия данных для графика
+    Q_PROPERTY(QString tabledata READ getTabledata WRITE setTabledata NOTIFY tabledataChanged) // имя порта
 public:
     explicit c_com(QObject *parent = 0);
     virtual ~c_com();
@@ -86,6 +88,12 @@ public:
     qreal getImpeller_d() const;
     void setImpeller_d(const qreal &impeller_d);
 
+    QXYSeries *getTableseries() const;
+    void setTableseries(QXYSeries *value);
+
+    QString getTabledata() const;
+    void setTabledata(const QString &tabledata);
+
 signals:
     void nameChanged();
     void dataChanged();
@@ -104,8 +112,9 @@ signals:
 
     void tare0Changed();
     void seriesChanged();
+    void tableseriesChanged();
     void stopTare();
-
+    void tabledataChanged();
 
 public slots:
     Q_INVOKABLE void openSerialPort(int port);
@@ -121,7 +130,7 @@ public slots:
     void calcImpeller();
 
     Q_INVOKABLE void fill();
-
+    void filltableseries();
 
 private:
     QSerialPort *m_serial;
@@ -156,10 +165,13 @@ private:
     qint64 m_taresum=0;
     //================================
     QXYSeries *series=0;
+    QXYSeries *tableseries=0;
+    QString m_tabledata="";
     int current=0;
 
     void saveSettings();
     void readSettings();
+
 
 
 };

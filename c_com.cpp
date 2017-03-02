@@ -9,6 +9,7 @@ c_com::c_com(QObject *parent) : QObject(parent), series(NULL)
 
     connect(m_serial, SIGNAL(readyRead()), this, SLOT(readData()));
     connect(this,SIGNAL(seriesChanged()), this, SLOT(fill()));
+    connect(this,SIGNAL(tabledataChanged()), this, SLOT(filltableseries()));
     connect(m_serial, SIGNAL(error(QSerialPort::SerialPortError)),
             this, SLOT(readError()));
     connect(m_serial, SIGNAL(aboutToClose()), this, SLOT(readIsOpen()));
@@ -50,6 +51,27 @@ void c_com::readSettings()
     setDevider(settings.value("Devider",1.0).toReal());
     setImpeller_h(settings.value("HImpeller",1.0).toReal());
     setImpeller_d(settings.value("DImpeller",1.0).toReal());
+}
+
+void c_com::filltableseries()
+{
+    qreal x,y;
+    bool ok;
+    qDebug()<<"filltableseries";
+    QStringList qs=m_tabledata.split(13);
+    qDebug()<<"fs";
+    if (qs.length()==0) return;
+    qDebug()<<m_tabledata;
+    foreach(QString item, qs) {
+        QStringList dl=item.split(";");
+        if (dl.length()<6) break;
+        qDebug()<<dl.length();
+        x=dl.at(4).toDouble(&ok);
+        y=dl.at(6).toDouble(&ok);
+        qDebug()<<x<<"--"<<y;
+        tableseries->append(x,y);
+    }
+    qDebug()<<"SER"<<tableseries->children();
 }
 
 
@@ -218,6 +240,27 @@ void c_com::fill()
 //    {
 //        series->append(i, 0.0);
 //    }
+}
+
+QString c_com::getTabledata() const
+{
+    return m_tabledata;
+}
+
+void c_com::setTabledata(const QString &tabledata)
+{
+    m_tabledata = tabledata;
+    emit tabledataChanged();
+}
+
+QXYSeries *c_com::getTableseries() const
+{
+    return tableseries;
+}
+
+void c_com::setTableseries(QXYSeries *value)
+{
+    tableseries = value;
 }
 
 qreal c_com::getImpeller_d() const

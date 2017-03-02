@@ -3,30 +3,13 @@ import QtCharts 2.0
 
 Item {
     id: chart
-    property int maxX: 200
-    property int minХ: 0
-    property int maxY: 1000000
-
-    property int minY: 0
-
-    property string seriesName: "Сдвиг"
-    property string chartName: "График нагрузки"
-    property alias ser: ls
-
+    property string seriesName: "Усилие, ед."
+    property string chartName: "График зависимости показаний датчика от массы грузов"
+    property alias series: ls
+    property real maxY: 10
     function addpoint(p) {
-        var c=ls.count
-        var i
-        ls.append(c,p)
-        if (c>chart.maxX) {
-            ls.remove(0)
-//            console.log(c)
-            for(  i=0; i<c;i++){
-//                console.log("i="+i+"x="+ls.at(i).x)
-                ls.replace(i,ls.at(i).x-1,ls.at(i).y)
-            }
-        }
+        ls.append(p)
     }
-
     Rectangle {
         border.color: "gray"
         radius:  20
@@ -38,10 +21,8 @@ Item {
             anchors.fill: parent
             antialiasing: true
             backgroundColor:  "black"
-            //dropShadowEnabled: true
             plotAreaColor: "black"
             titleColor: "yellow"
-
             LineSeries {
                 id: ls
                 name: seriesName
@@ -51,27 +32,25 @@ Item {
                 width: 2
                 ValueAxis {
                         id: axisX
-                        min: chart.minХ
-                        max: maxX
+                        min: 0
+                        max: 500
                         tickCount: 21
-                        gridVisible: false
+                        gridVisible: true
                         color: "white"
-                        labelsVisible: false
+                        labelsVisible: true
                         minorGridVisible: false
                     }
                 ValueAxis {
                       id: axisY
-                      min: minY
-                      max: maxY
+                      min: 0
+                      max: chart.maxY
                       tickCount: 11
-                      gridVisible: false
+                      gridVisible: true
                       labelsColor: "white"
                       color: "white"
                   }
-
                 axisX: axisX
                 axisY: axisY
-                //Component.onCompleted: { ser=ls}
             }
         }
     }
