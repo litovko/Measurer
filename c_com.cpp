@@ -57,6 +57,10 @@ void c_com::readSettings()
 void c_com::filltableseries()
 {
     qreal x,y, minx=1000000, maxx=0, miny=1000000, maxy=0;
+    qreal sxy=0, sx2=0; //суммы произведения и квадратов
+    qreal sx=0, sy=0; //суммы значений
+    int n=0; // количество точек
+    qreal a,b; //коэффициенты линейного уравнения
     bool ok;
     qDebug()<<"filltableseries";
     QStringList qs=m_tabledata.split(13);
@@ -71,7 +75,16 @@ void c_com::filltableseries()
         y=dl.at(6).toDouble(&ok); miny=qMin(miny, y); maxy=qMax(maxy, y);
         qDebug()<<x<<"--"<<y;
         tableseries->append(x,y);
+        //===============
+        n++;
+        sxy+=x*y; sx2+=x*x;
+        sx+=x; sy+=y;
     }
+    //
+    minx=0; maxx=1000;
+    miny=-200; maxy=1800;
+    b=(sxy-sx*sy/n)/(sx2-sx*sx/n);
+    a=sy/n-b*sx/n;
     qDebug()<<"Axes"<<tableseries->attachedAxes().length();
     if (tableseries->attachedAxes().length()<2) return;
     tableseries->attachedAxes()[0]->setMin(minx);
@@ -79,13 +92,29 @@ void c_com::filltableseries()
     tableseries->attachedAxes()[0]->setMax(maxx);
     tableseries->attachedAxes()[1]->setMax(maxy);
     //qDebug()<<"SER"<<tableseries->children();
+    lineseries->append(0,a);
+    lineseries->append(maxx,a+b*maxx);
+    lineseries->attachedAxes()[0]->setMin(minx);
+    lineseries->attachedAxes()[1]->setMin(miny);
+    lineseries->attachedAxes()[0]->setMax(maxx);
+    lineseries->attachedAxes()[1]->setMax(maxy);
+}
+
+QXYSeries *c_com::getLineseries() const
+{
+    return lineseries;
+}
+
+void c_com::setLineseries(QXYSeries *value)
+{
+    lineseries = value;
 }
 
 
 
 void c_com::openSerialPort(int port)
 {
-
+    
     if (port>=m_ports.length()) {
         qDebug()<<"WRONG PORT NUMBER";
         return;

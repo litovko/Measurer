@@ -260,6 +260,7 @@ ApplicationWindow {
             onPulleyChanged: console.log("pulley radius chaged:"+m.pulley)
             series:  mc.ser
             tablseries: grad.chart.series
+            lineries: grad.chart.lineseries
             tabledata: grad.dataset
             onStopTare: win.fcommand("CALIBRATE STOP")
         }

@@ -30,6 +30,7 @@ class c_com : public QObject
     //*******************************************
     Q_PROPERTY(QXYSeries *series READ getSeries WRITE setSeries NOTIFY seriesChanged) // серия данных для графика
     Q_PROPERTY(QXYSeries *tablseries READ getTableseries WRITE setTableseries NOTIFY tableseriesChanged) // серия данных для графика
+    Q_PROPERTY(QXYSeries *lineries READ getLineseries WRITE setLineseries NOTIFY lineseriesChanged) // серия данных для линейного графика
     Q_PROPERTY(QString tabledata READ getTabledata WRITE setTabledata NOTIFY tabledataChanged) // имя порта
 public:
     explicit c_com(QObject *parent = 0);
@@ -94,6 +95,9 @@ public:
     QString getTabledata() const;
     void setTabledata(const QString &tabledata);
 
+    QXYSeries *getLineseries() const;
+    void setLineseries(QXYSeries *value);
+
 signals:
     void nameChanged();
     void dataChanged();
@@ -113,6 +117,7 @@ signals:
     void tare0Changed();
     void seriesChanged();
     void tableseriesChanged();
+    void lineseriesChanged();
     void stopTare();
     void tabledataChanged();
 
@@ -166,6 +171,7 @@ private:
     //================================
     QXYSeries *series=0;
     QXYSeries *tableseries=0;
+    QXYSeries *lineseries=0;
     QString m_tabledata="";
     int current=0;
 
