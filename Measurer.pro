@@ -20,4 +20,5 @@ HEADERS += \
     c_com.h \
     c_mstat.h
 
-DISTFILES +=
+DISTFILES += \
+    sound/menuitemhover.wav

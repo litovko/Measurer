@@ -40,6 +40,9 @@ void c_com::saveSettings()
     settings.setValue("Devider",devider());
     settings.setValue("HImpeller",getImpeller_h());
     settings.setValue("DImpeller",getImpeller_d());
+    //==
+    settings.setValue("K_a",getA());
+    settings.setValue("K_b",getB());
 }
 
 void c_com::readSettings()
@@ -52,6 +55,9 @@ void c_com::readSettings()
     setDevider(settings.value("Devider",1.0).toReal());
     setImpeller_h(settings.value("HImpeller",1.0).toReal());
     setImpeller_d(settings.value("DImpeller",1.0).toReal());
+    //==
+    setA(settings.value("K_a",0.0).toReal());
+    setB(settings.value("K_b",1.0).toReal());
 }
 
 void c_com::filltableseries()
@@ -82,7 +88,7 @@ void c_com::filltableseries()
     }
     //
     minx=0; maxx=1000;
-    miny=-200; maxy=1800;
+    miny=-000; maxy=1800;
     b=(sxy-sx*sy/n)/(sx2-sx*sx/n);
     a=sy/n-b*sx/n;
     qDebug()<<"Axes"<<tableseries->attachedAxes().length();
@@ -98,6 +104,28 @@ void c_com::filltableseries()
     lineseries->attachedAxes()[1]->setMin(miny);
     lineseries->attachedAxes()[0]->setMax(maxx);
     lineseries->attachedAxes()[1]->setMax(maxy);
+    m_a=a;
+    m_b=b;
+}
+
+qreal c_com::getB() const
+{
+    return m_b;
+}
+
+void c_com::setB(const qreal &b)
+{
+    m_b = b;
+}
+
+qreal c_com::getA() const
+{
+    return m_a;
+}
+
+void c_com::setA(const qreal &a)
+{
+    m_a = a;
 }
 
 QXYSeries *c_com::getLineseries() const

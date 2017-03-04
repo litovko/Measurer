@@ -1,10 +1,15 @@
 import QtQuick 2.5
+import QtMultimedia 5.5
 Item {
     id: menuitem
     property string text: "Item1"
     property string command: "Command"
     property bool pressed: false
     signal buttonClicked
+    SoundEffect {
+        id:effect
+        source: "D:\work\build-Measurer-Desktop_Qt_5_8_0_MinGW_32bit3-Debug/menuitemhover.wav"
+    }
 
     Rectangle {
         id: body
@@ -53,6 +58,7 @@ Item {
 //                console.log("onPressed->onButtonClicked")
             }
             onReleased: menuitem.pressed=false
+            onContainsMouseChanged: effect.play()
         }
     }
 

@@ -98,6 +98,12 @@ public:
     QXYSeries *getLineseries() const;
     void setLineseries(QXYSeries *value);
 
+    qreal getA() const;
+    void setA(const qreal &a);
+
+    qreal getB() const;
+    void setB(const qreal &b);
+
 signals:
     void nameChanged();
     void dataChanged();
@@ -162,7 +168,10 @@ private:
     qreal m_impeller; // Постоянная крыльчатки
     qreal m_impeller_h=3.0; // Высота крыльчатки
     qreal m_impeller_d=2.5; // Диаметр крыльчатки
-
+    //====
+    // коэффициенты апроксимирующей прямой.
+    qreal m_a=0;
+    qreal m_b=1;
 
     //==
     qint32 m_count=0;

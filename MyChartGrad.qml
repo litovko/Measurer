@@ -29,11 +29,12 @@ Item {
                 name: seriesName
                 //style: Qt.DotLine
                 //capStyle: Qt.RoundCap
-                color: "green"
+                color: "yellow"
                 //width: 2
                 pointLabelsVisible: true
                 pointsVisible: true
                 pointLabelsColor: "yellow"
+                markerSize: 3
                 ValueAxis {
                         id: axisX
                         min: 0
