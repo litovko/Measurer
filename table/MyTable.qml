@@ -119,7 +119,7 @@ Item {
                 height: 80
                 text1: "Отсчеты по индикатору ("+count+" шт.)"
                 onCountChanged: {
-                    print("count changed="+count)
+                    //print("count changed="+count)
                 }
             }
             MyHeaderItem {

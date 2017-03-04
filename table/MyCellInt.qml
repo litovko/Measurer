@@ -10,7 +10,7 @@ Item {
     onCelldataChanged: {
         //if (celltype===0) {
             t.text=c.celldata
-            console.log("C="+celldata+" "+t.text)
+            //console.log("C="+celldata+" "+t.text)
         //}
     }
     function bw() {if (celltype===0)return 1; return 3}
@@ -79,7 +79,7 @@ Item {
             visible: false
         }
         Keys.onPressed: {
-                console.log("pressed:"+event.key+"  "+Qt.Key_Enter)
+                //console.log("pressed:"+event.key+"  "+Qt.Key_Enter)
                 if (event.key === Qt.Key_Escape) {
                     f.text=t.text;
                     c.state="SHOW"

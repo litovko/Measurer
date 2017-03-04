@@ -90,9 +90,9 @@ Item {
                     addcolumn();
                 }
                 //Расставляем данные
-                print(dataset)
+                //print(dataset)
                 var str=dataset
-                print(str)
+                //print(str)
                 var s0=0
 
                 var s=str.indexOf("\r",0)
@@ -100,9 +100,9 @@ Item {
                 while (s>0) {
                     var sbstr=str.substring(0,s)
                     str=str.substring(s+1,str.length)
-                    print("i="+i)
+//                    print("i="+i)
                     s=str.indexOf("\r",0)
-                    var sl=sbstr.split(";");  print("sl="+sl)
+                    var sl=sbstr.split(";");  //print("sl="+sl)
                         setcell(i,1,sl[0].trim());
                         setcell(i,2,sl[1]);
                         setcell(i,3,sl[2].trim());
@@ -110,9 +110,9 @@ Item {
 
                     i++
                 }
-                print("01234567890123456789012345678901234567890")
-                print(dataset)
-                print(s);
+//                print("01234567890123456789012345678901234567890")
+//                print(dataset)
+//                print(s);
                 //setcell(2,2,10)
                 //setcell(2,6,"1/2/3/4/5/6/7/8")
             }
