@@ -17,5 +17,6 @@
         <file>table/MyTable.qml</file>
         <file>MyGraduator.qml</file>
         <file>MyChartGrad.qml</file>
+        <file>sound/menuitemhover.wav</file>
     </qresource>
 </RCC>

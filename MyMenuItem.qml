@@ -8,7 +8,7 @@ Item {
     signal buttonClicked
     SoundEffect {
         id:effect
-        source: "D:\work\build-Measurer-Desktop_Qt_5_8_0_MinGW_32bit3-Debug/menuitemhover.wav"
+        source: "/sound/menuitemhover.wav"
     }
 
     Rectangle {
@@ -58,7 +58,7 @@ Item {
 //                console.log("onPressed->onButtonClicked")
             }
             onReleased: menuitem.pressed=false
-            onContainsMouseChanged: effect.play()
+            onContainsMouseChanged: if(containsMouse)effect.play()
         }
     }
 
