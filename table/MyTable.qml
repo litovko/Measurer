@@ -15,7 +15,7 @@ Item {
     //property string dataset: ""
     property int maxrow: 7
     function addcolumn(){ //добавляем одну колонку во все строки в хэдер
-        if (!rownumber) return;
+        //if (!rownumber) return;
         for(var i=0; i<datarows.children.length;i++) {
             datarows.children[i].addcolumn();
         }

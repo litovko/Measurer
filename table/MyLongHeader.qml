@@ -8,7 +8,7 @@ Item {
     property int count: 0
 
     function addcolumn() { //создаем объект заголовка
-        print("add->"+(count+1))
+        print("header data column add->"+(count+1))
         var newObject = Qt.createQmlObject(
                 'MyHeaderItem{
                 text: "'+(r.children.length+1)+'"

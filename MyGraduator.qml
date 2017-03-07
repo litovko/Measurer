@@ -9,8 +9,8 @@ Item {
     property alias maxrow : tbl.maxrow
     property string dataset: ""
 
-    property int table_rows: 7
-    property int table_columns: 7
+    property int table_rows: 0
+    property int table_columns: 0
     property alias chart: chart
     state: "Таблица"
     Settings {

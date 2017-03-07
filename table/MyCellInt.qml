@@ -44,9 +44,10 @@ Item {
             anchors.margins: 5
             font.pixelSize: 14
             font.bold: true
-            text: t.text
+            //text: t.text
             onAccepted: { c.celldata=f.text; c.state="SHOW" }
-            onFocusChanged: if(!focus) c.state="SHOW"
+            onFocusChanged: if(!focus) c.state="SHOW";
+                            else text=t.text;
             validator: RegExpValidator{ //по умолчанию можем вводить вещественные числа
                         regExp: /(?:\d*\.)?\d+/
                        }
