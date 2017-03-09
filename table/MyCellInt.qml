@@ -10,7 +10,7 @@ Item {
     signal changed
     onCelldataChanged: {
         //if (celltype===0) {
-            t.text=c.celldata
+            //t.text=c.celldata
             //console.log("C="+celldata+" "+t.text)
         //}
     }

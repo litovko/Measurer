@@ -5,7 +5,7 @@ Item {
     id: chart
     property int maxX: 200
     property int minХ: 0
-    property int maxY: 1000000
+    property int maxY: 2000000
 
     property int minY: 0
 

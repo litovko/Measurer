@@ -29,8 +29,8 @@ Item {
                id:t
                color: "yellow"
 
-               text: (value/1000).toFixed(1)
-               font.family: "SimSun-ExtB"
+               text: (value).toFixed(2)
+               font.family: "Arial"
                font.bold: true
                font.pointSize: r.height-r.anchors.margins*2
                horizontalAlignment: Text.AlignHCenter

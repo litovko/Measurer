@@ -108,7 +108,7 @@ void c_com::filltableseries()
     qreal p=m;
     for(int j=0; j<=10;j++) {
         qDebug()<<"p="<<p<<"maxy="<<maxy;
-        if ((maxy>=p*0.9)&&(maxy<p)) {maxy=p+m*0.05; break;}
+        if ((maxy>=m-m*0.1*j)&&(maxy<p)) {maxy=p+m*0.05; break;}
         p=m-m*0.1*j;
     }
     qDebug()<<"maxy="<<maxy;
@@ -116,7 +116,7 @@ void c_com::filltableseries()
     p=m;
     for(int j=0; j<=10;j++) {
         qDebug()<<"p="<<p<<"maxx="<<maxx;
-        if ((maxx>=p*0.9)&&(maxx<p)) {maxx=p+m*0.05; break;}
+        if ((maxx>=m-m*0.1*j)&&(maxx<p)) {maxx=p+m*0.05; break;}
         p=m-m*0.1*j;
     }
     qDebug()<<"maxx="<<maxx;
@@ -516,7 +516,10 @@ void c_com::setWeight(const qreal &weight)
 {
     m_stat->addPoint(weight);
     setAverage(m_stat->average());
+//    qDebug()<<"w1"<<weight<<" "<<m_weight;
+    if (m_weight == weight) return;
     m_weight = weight;
+//    qDebug()<<"w2"<<weight<<" "<<m_weight;
     emit weightChanged();
 
 }

@@ -218,12 +218,12 @@ ApplicationWindow {
                 width: 280
                 height: 40
             }
-            MyDigital {
-                name: "Средн:"
-                value: m.average
-                width: 280
-                height: 40
-            }
+//            MyDigital {
+//                name: "Средн:"
+//                value: m.average
+//                width: 280
+//                height: 40
+//            }
 
             MyDigital {
                 name: "Смещ.:"
@@ -233,19 +233,19 @@ ApplicationWindow {
             }
             MyDigital {
                 name: "Рад. :"
-                value: m.pulley*1000
+                value: m.pulley
                 width: 280
                 height: 40
             }
             MyDigital {
                 name: "Угол :"
-                value: m.rotor*1000
+                value: m.rotor
                 width: 280
                 height: 40
             }
             MyDigital {
                 name: "Пост. К :"
-                value: m.impeller*1000
+                value: m.impeller
                 width: 280
                 height: 40
             }

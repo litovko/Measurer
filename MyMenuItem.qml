@@ -53,7 +53,7 @@ Item {
             anchors.fill: body
             hoverEnabled: true
             acceptedButtons: Qt.LeftButton
-            //propagateComposedEvents: true
+
 
             onPressed: {
                 menuitem.pressed=true; menuitem.buttonClicked();
