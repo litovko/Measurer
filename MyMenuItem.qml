@@ -5,6 +5,7 @@ Item {
     property string text: "Item1"
     property string command: "Command"
     property bool pressed: false
+    property real fontsize: 10
     signal buttonClicked
     SoundEffect {
         id:effect
@@ -37,11 +38,12 @@ Item {
         border.color: ma.containsMouse?"yellow":"#666666"
         border.width: ma.containsMouse?1:4
         Text {
+            id: ttt
             color: ma.containsMouse?"yellow":"white"
             text: menuitem.text
             font.bold: true
             horizontalAlignment: Text.AlignHCenter
-            font.pointSize: ma.containsMouse?12:10
+            font.pointSize: ma.containsMouse?fontsize*1.2:fontsize
             anchors.centerIn: parent
         }
 

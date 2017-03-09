@@ -185,6 +185,7 @@ ApplicationWindow {
                 id: m_cal
                 width: r.wo
                 height: 40
+                fontsize: 9
                 text: "КАЛИБРОВКА '0'[F5]"
                 command: "CALIBRATE"
                 onButtonClicked: win.fcommand(command)

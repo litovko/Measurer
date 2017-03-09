@@ -13,6 +13,7 @@ Item {
                 celltype: -1
                 width: d.width/dataset.children.length
                 height: dataline.height
+                fontsize: 8
                 onChanged: d.changed()
             }',dataset, "dynamicDataCell");
     }

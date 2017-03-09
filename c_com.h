@@ -6,6 +6,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QString>
 #include "c_mstat.h"
+#include <QFile>
 
 #define NUM_POINTS 200
 using namespace QtCharts;
@@ -32,6 +33,8 @@ class c_com : public QObject
     Q_PROPERTY(QXYSeries *tablseries READ getTableseries WRITE setTableseries NOTIFY tableseriesChanged) // серия данных для графика
     Q_PROPERTY(QXYSeries *lineries READ getLineseries WRITE setLineseries NOTIFY lineseriesChanged) // серия данных для линейного графика
     Q_PROPERTY(QString tabledata READ getTabledata WRITE setTabledata NOTIFY tabledataChanged) // имя порта
+    //===========================
+    Q_PROPERTY(QString filename READ getFilename() WRITE setFilename NOTIFY filenameChanged) // имя порта
 public:
     explicit c_com(QObject *parent = 0);
     virtual ~c_com();
@@ -104,6 +107,9 @@ public:
     qreal getB() const;
     void setB(const qreal &b);
 
+    QString getFilename() const;
+    void setFilename(const QString &filename);
+
 signals:
     void nameChanged();
     void dataChanged();
@@ -126,6 +132,7 @@ signals:
     void lineseriesChanged();
     void stopTare();
     void tabledataChanged();
+    void filenameChanged();
 
 public slots:
     Q_INVOKABLE void openSerialPort(int port);
@@ -142,6 +149,8 @@ public slots:
 
     Q_INVOKABLE void fill();
     void filltableseries();
+    void writefile();
+    QString readfile();
 
 private:
     QSerialPort *m_serial;
@@ -186,7 +195,8 @@ private:
 
     void saveSettings();
     void readSettings();
-
+    QFile m_file;
+    QString m_filename="init.csv";
 
 
 };

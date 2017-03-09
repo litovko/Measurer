@@ -55,11 +55,15 @@ Item {
 //        s="'Радиус крыльчатки':'"+rad+"';'Высота крыльчатки':'"+imp_h+"';'Диаметр крыльчатки':'"+imp_d+"';'Количество строк':'"+rownumber +"';'Количество колонок':'"+colnumber
 //        s=s+"'\r"
         for (var i=0; i<datarows.children.length; i++)
-        s=s+datarows.children[i].getdata()+"\r"
+        s=s+datarows.children[i].getdata()+"\n\r"
         return s
     }
     function setcell(i,j,val){
         datarows.children[i].datalinerow.children[j].setdata(val)
+    }
+    function cleartable() {
+        for(var i=rownumber;i>0; i--) datarows.children[i-1].destroy();
+        //for ( i=0; i<1000000; i++);
     }
 
     Rectangle {

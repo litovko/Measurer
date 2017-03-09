@@ -13,12 +13,72 @@ Item {
     property int table_columns: 0
     property alias chart: chart
     state: "Таблица"
+    function filltable(str)
+    {
+        //var str=dataset
+        table_rows=tbl.children.length;
+        if (table_rows>0) {
+            print("")
+            if (!timer.running)timer.start()
+            return;
+        }
+        var s0=0
+        var s=str.indexOf("\r",0)
+        var i=0; var j=0
+        while (s>0) {
+            print("filltable-table_rows:"+table_rows)
+            if (i > table_rows-1) tbl.addrow();
+            var sbstr=str.substring(0,s)
+            str=str.substring(s+1,str.length)
+            print("str:"+sbstr)
+            s=str.indexOf("\r",0);
+            var sl=sbstr.split(";");  //print("sl="+sl)
+                tbl.setcell(i,1,sl[0].trim());
+                tbl.setcell(i,2,sl[1].trim());
+                tbl.setcell(i,3,sl[2].trim());
+                tbl.setcell(i,6,sl[5].trim());
+            i++
+        }
+        gr.dataset=tbl.getdata();
+    }
+    Timer {
+        id: timer
+        interval: 500
+        onTriggered: filltable(gr.dataset)
+    }
+
     Settings {
         category: "Graduator"
         property alias maxrow: tbl.maxrow
         property alias dataset: gr.dataset
         property alias table_rows: gr.table_rows
         property alias table_columns: gr.table_columns
+
+    }
+    FileDialog {
+        id: fileDialog
+        title: "Укажите имя файла данных таблицы"
+        //folder: shortcuts.home
+        selectExisting: false
+        selectMultiple: false
+        nameFilters: [ "Файлы данных(*.csv *.txt)", "Все файлы(*)" ]
+        onAccepted: {
+            m.filename=fileDialog.fileUrl;
+            if(selectExisting) { //  загружаем данные из файла
+                tbl.cleartable();
+                gr.dataset=m.readfile();
+                print("gr.dataset"+gr.dataset);
+                filltable(gr.dataset);
+                state="Таблица"
+            }
+            else  m.writefile();
+            fileDialog.visible=false;
+        }
+        onRejected: {
+            console.log("Canceled")
+            fileDialog.visible=false;
+        }
+
     }
     Rectangle {
         anchors.margins: 5
@@ -55,6 +115,20 @@ Item {
                     table_columns=tbl.colnumber
                     table_rows=tbl.rownumber
                     dataset=tbl.getdata()
+                    fileDialog.selectExisting = false
+                    fileDialog.visible=true;
+                    //gr.state="Загрузить"
+                }
+            }
+            MyMenuItem {
+                width: 200
+                height: 40
+                text: "Загрузить таблицу"
+                command: "READ"
+                onButtonClicked: {
+                    fileDialog.selectExisting = true
+                    fileDialog.visible=true;
+                    //gr.state="Загрузить"
                 }
             }
             MyMenuItem {
@@ -63,7 +137,7 @@ Item {
                 text: "Таблица/График"
                 command: "ПЕРЕКЛ"
                 onButtonClicked: {
-                   gr.state=gr.state==="Таблица"?"График":"Таблица"
+                   gr.state=gr.state==="Таблица"?"График":"Таблица" 
                 }
             }
             MyMenuItem {
@@ -83,38 +157,15 @@ Item {
             anchors.left: parent.left
             anchors.bottom: parent.bottom
             Component.onCompleted: {
-                for(var i=0;i<table_rows; i++) {
-                    addrow();
-                }
-                for( i=0;i<table_columns; i++) {
+//                for(var i=0;i<table_rows; i++) {
+//                    addrow();
+//                }
+                for( var i=0;i<table_columns; i++) {
                     addcolumn();
                 }
                 //Расставляем данные
-                //print(dataset)
-                var str=dataset
-                //print(str)
-                var s0=0
-
-                var s=str.indexOf("\r",0)
-                i=0; var j=0
-                while (s>0) {
-                    var sbstr=str.substring(0,s)
-                    str=str.substring(s+1,str.length)
-//                    print("i="+i)
-                    s=str.indexOf("\r",0)
-                    var sl=sbstr.split(";");  //print("sl="+sl)
-                        setcell(i,1,sl[0].trim());
-                        setcell(i,2,sl[1]);
-                        setcell(i,3,sl[2].trim());
-                        setcell(i,6,sl[5].trim());
-
-                    i++
-                }
-//                print("01234567890123456789012345678901234567890")
-//                print(dataset)
-//                print(s);
-                //setcell(2,2,10)
-                //setcell(2,6,"1/2/3/4/5/6/7/8")
+                table_rows=0;
+                filltable(dataset)
             }
             rad: m.pulley
             imp_d: m.impeller_d
@@ -140,6 +191,7 @@ Item {
             PropertyChanges { target: tbl; visible: false; }
              PropertyChanges { target: chart; visible: true; }
         }
+
     ]
 
 }

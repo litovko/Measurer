@@ -6,6 +6,7 @@ Item {
     id: c
     property string celldata: ""
     property int celltype : 0 //1-int 2-real -1 - c датчика 3 - просто текст 0 - вычисляемый
+    property real fontsize: 9
     signal changed
     onCelldataChanged: {
         //if (celltype===0) {
@@ -32,7 +33,7 @@ Item {
             anchors.fill: parent
             color: "#e7ee90"
 
-            font.pointSize: 9
+            font.pointSize: fontsize
             text: c.celldata
             font.bold: true
             verticalAlignment: Text.AlignVCenter
@@ -42,7 +43,7 @@ Item {
             id: f
             anchors.fill: parent
             anchors.margins: 5
-            font.pixelSize: 14
+            font.pointSize:  fontsize
             font.bold: true
             //text: t.text
             onAccepted: { c.celldata=f.text; c.state="SHOW" }

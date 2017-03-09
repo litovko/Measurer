@@ -13,9 +13,10 @@ c_com::c_com(QObject *parent) : QObject(parent), series(NULL)
     connect(this,SIGNAL(tabledataChanged()), this, SLOT(filltableseries()));
     connect(m_serial, SIGNAL(error(QSerialPort::SerialPortError)),
             this, SLOT(readError()));
-    connect(m_serial, SIGNAL(aboutToClose()), this, SLOT(readIsOpen()));
+    connect(m_serial, SIGNAL(aboutToClose()),  this, SLOT(readIsOpen()));
     connect(this, SIGNAL(impeller_hChanged()), this, SLOT(calcImpeller()));
     connect(this, SIGNAL(impeller_dChanged()), this, SLOT(calcImpeller()));
+    //connect(this, SIGNAL(filenameChanged()),   this, SLOT(writefile()));
     fill();
     //setPulley(2.5);
     listPorts();
@@ -60,8 +61,20 @@ void c_com::readSettings()
     setB(settings.value("K_b",1.0).toReal());
 }
 
+QString c_com::getFilename() const
+{
+    return m_filename;
+}
+
+void c_com::setFilename(const QString &filename)
+{
+    m_filename = filename;
+    emit filenameChanged();
+}
+
 void c_com::filltableseries()
 {
+    qDebug()<<"fill data on CHARTS";
     qreal x,y, minx=1000000, maxx=0, miny=1000000, maxy=0;
     qreal sxy=0, sx2=0; //суммы произведения и квадратов
     qreal sx=0, sy=0; //суммы значений
@@ -73,13 +86,15 @@ void c_com::filltableseries()
     qDebug()<<"fs";
     if (qs.length()==0) return;
     qDebug()<<m_tabledata;
+    lineseries->clear();
+    tableseries->clear();
     foreach(QString item, qs) {
         QStringList dl=item.split(";");
         if (dl.length()<6) break;
         //qDebug()<<dl.length();
         x=dl.at(4).toDouble(&ok); minx=qMin(minx, x); maxx=qMax(maxx, x);
         y=dl.at(6).toDouble(&ok); miny=qMin(miny, y); maxy=qMax(maxy, y);
-        qDebug()<<x<<"--"<<y;
+        qDebug()<<x<<"--"<<y<<"maxx:"<<maxx<<"maxy:"<<maxy;
         tableseries->append(x,y);
         //===============
         n++;
@@ -87,8 +102,26 @@ void c_com::filltableseries()
         sx+=x; sy+=y;
     }
     //
-    minx=0; maxx=1000;
-    miny=-000; maxy=1800;
+
+    minx=0;
+    qreal m=10000;
+    qreal p=m;
+    for(int j=0; j<=10;j++) {
+        qDebug()<<"p="<<p<<"maxy="<<maxy;
+        if ((maxy>=p*0.9)&&(maxy<p)) {maxy=p+m*0.05; break;}
+        p=m-m*0.1*j;
+    }
+    qDebug()<<"maxy="<<maxy;
+
+    p=m;
+    for(int j=0; j<=10;j++) {
+        qDebug()<<"p="<<p<<"maxx="<<maxx;
+        if ((maxx>=p*0.9)&&(maxx<p)) {maxx=p+m*0.05; break;}
+        p=m-m*0.1*j;
+    }
+    qDebug()<<"maxx="<<maxx;
+    //maxx=0;
+    miny=-000;
     b=(sxy-sx*sy/n)/(sx2-sx*sx/n);
     a=sy/n-b*sx/n;
     qDebug()<<"Axes"<<tableseries->attachedAxes().length();
@@ -106,6 +139,45 @@ void c_com::filltableseries()
     lineseries->attachedAxes()[1]->setMax(maxy);
     m_a=a;
     m_b=b;
+}
+
+void c_com::writefile()
+{
+
+    //qDebug()<<"Write file-1:"<<m_filename;
+    QUrl url(m_filename);
+    QFile file(url.toLocalFile());
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug()<<"error:"<<file.errorString();
+        return;
+    }
+    //qDebug()<<"Write file-2:"<<m_tabledata;
+    QTextStream out(&file);
+    out << m_tabledata;
+    file.close();
+
+}
+
+QString c_com::readfile()
+{
+    QUrl url(m_filename);
+    QFile file(url.toLocalFile());
+    qDebug()<<url;
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+       qDebug()<<"error:"<<file.errorString();
+       return "";
+    }
+    QTextStream in(&file);
+    QString line;
+    qDebug()<<"read";
+    while (!in.atEnd()) {
+               line += in.readLine()+"\n\r";
+
+    //          process_line(line);
+    }
+    qDebug()<<line;
+    return line;
+
 }
 
 qreal c_com::getB() const
