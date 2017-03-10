@@ -31,7 +31,8 @@ class c_com : public QObject
     //*******************************************
     Q_PROPERTY(QXYSeries *series READ getSeries WRITE setSeries NOTIFY seriesChanged) // серия данных для графика
     Q_PROPERTY(QXYSeries *tablseries READ getTableseries WRITE setTableseries NOTIFY tableseriesChanged) // серия данных для графика
-    Q_PROPERTY(QXYSeries *lineries READ getLineseries WRITE setLineseries NOTIFY lineseriesChanged) // серия данных для линейного графика
+    Q_PROPERTY(QXYSeries *lineseries READ getLineseries WRITE setLineseries NOTIFY lineseriesChanged) // серия данных для линейного графика
+    Q_PROPERTY(QXYSeries *absseries READ getAbsseries WRITE setAbsseries NOTIFY absseriesChanged) // серия данных для линейного графика
     Q_PROPERTY(QString tabledata READ getTabledata WRITE setTabledata NOTIFY tabledataChanged) // имя порта
     //===========================
     Q_PROPERTY(QString filename READ getFilename() WRITE setFilename NOTIFY filenameChanged) // имя порта
@@ -110,6 +111,9 @@ public:
     QString getFilename() const;
     void setFilename(const QString &filename);
 
+    QXYSeries *getAbsseries() const;
+    void setAbsseries(QXYSeries *value);
+
 signals:
     void nameChanged();
     void dataChanged();
@@ -130,6 +134,7 @@ signals:
     void seriesChanged();
     void tableseriesChanged();
     void lineseriesChanged();
+    void absseriesChanged();
     void stopTare();
     void tabledataChanged();
     void filenameChanged();
@@ -190,6 +195,7 @@ private:
     QXYSeries *series=0;
     QXYSeries *tableseries=0;
     QXYSeries *lineseries=0;
+    QXYSeries *absseries=0;
     QString m_tabledata="";
     int current=0;
 
@@ -197,6 +203,7 @@ private:
     void readSettings();
     QFile m_file;
     QString m_filename="init.csv";
+    qreal func(const qreal &x);
 
 
 };

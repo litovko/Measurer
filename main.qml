@@ -259,9 +259,10 @@ ApplicationWindow {
                 //m.openSerialPort(0);
             }
             onPulleyChanged: console.log("pulley radius chaged:"+m.pulley)
-            series:  mc.ser
-            tablseries: grad.chart.series
-            lineries: grad.chart.lineseries
+            series:  mc.ser //график - исходные данные
+            tablseries: grad.chart.series //  график - точки на графике
+            lineseries: grad.chart.lineseries // график - интерполирующая прямая\
+            absseries: grad.chart.absseries // график - абсолютое отклонение
             tabledata: grad.dataset
             onStopTare: win.fcommand("CALIBRATE STOP")
         }

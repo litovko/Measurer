@@ -61,6 +61,11 @@ void c_com::readSettings()
     setB(settings.value("K_b",1.0).toReal());
 }
 
+qreal c_com::func(const qreal &x)
+{
+    return x*m_b+m_a;
+}
+
 QString c_com::getFilename() const
 {
     return m_filename;
@@ -114,17 +119,19 @@ void c_com::filltableseries()
     qDebug()<<"maxy="<<maxy;
 
     p=m;
-    for(int j=0; j<=10;j++) {
-        qDebug()<<"p="<<p<<"maxx="<<maxx;
-        if ((maxx>=m-m*0.1*j)&&(maxx<p)) {maxx=p+m*0.05; break;}
-        p=m-m*0.1*j;
-    }
+//    for(int j=0; j<=10;j++) {
+//        qDebug()<<"p="<<p<<"maxx="<<maxx;
+//        if ((maxx>=m-m*0.1*j)&&(maxx<p)) {maxx=p; break;}
+//        p=m-m*0.1*j;
+//    }
     qDebug()<<"maxx="<<maxx;
-    //maxx=0;
+
+    maxx=maxx*1.1;
     miny=-000;
     b=(sxy-sx*sy/n)/(sx2-sx*sx/n);
     a=sy/n-b*sx/n;
-    qDebug()<<"Axes"<<tableseries->attachedAxes().length();
+    m_a=a; m_b=b;
+    qDebug()<<"A="<<m_a<<" B="<<m_b;
     if (tableseries->attachedAxes().length()<2) return;
     tableseries->attachedAxes()[0]->setMin(minx);
     tableseries->attachedAxes()[1]->setMin(miny);
@@ -137,6 +144,13 @@ void c_com::filltableseries()
     lineseries->attachedAxes()[1]->setMin(miny);
     lineseries->attachedAxes()[0]->setMax(maxx);
     lineseries->attachedAxes()[1]->setMax(maxy);
+
+    absseries->attachedAxes()[0]->setMin(minx);
+    absseries->attachedAxes()[0]->setMax(maxx);
+    foreach (QPointF p, tableseries->pointsVector()) {
+        qDebug()<<"p="<<p<<" f="<<func(p.x())<<" abs="<<qAbs(func(p.x())-p.y())<<"otkl:"<<100*qAbs(func(p.x())-p.y())/p.y();
+        absseries->append(p.x(),100*qAbs(func(p.x())-p.y())/p.y());
+    }
     m_a=a;
     m_b=b;
 }
@@ -178,6 +192,16 @@ QString c_com::readfile()
     qDebug()<<line;
     return line;
 
+}
+
+QXYSeries *c_com::getAbsseries() const
+{
+    return absseries;
+}
+
+void c_com::setAbsseries(QXYSeries *value)
+{
+    absseries = value;
 }
 
 qreal c_com::getB() const

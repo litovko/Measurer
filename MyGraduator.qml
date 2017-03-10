@@ -152,7 +152,7 @@ Item {
         }
         MyTable{
             id: tbl
-            height:400
+            height:500
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.bottom: parent.bottom
@@ -174,7 +174,7 @@ Item {
         }
         MyChartGrad {
             id: chart
-            height:400
+            height:500
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.bottom: parent.bottom

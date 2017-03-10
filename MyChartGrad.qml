@@ -7,7 +7,8 @@ Item {
     property string chartName: "График зависимости показаний датчика от массы грузов"
     property alias series: ls
     property alias lineseries: line
-    property real maxY: 10
+    property alias absseries: absseries
+    property real maxY: 20
     function addpoint(p) {
         ls.append(p)
     }
@@ -24,6 +25,7 @@ Item {
             backgroundColor:  "black"
             plotAreaColor: "black"
             titleColor: "yellow"
+
             ScatterSeries {
                 id: ls
                 name: seriesName
@@ -44,6 +46,7 @@ Item {
                         color: "white"
                         labelsVisible: true
                         minorGridVisible: false
+                        titleText: "Сопротивление вращательному срезу, кПа"
                     }
                 ValueAxis {
                       id: axisY
@@ -54,6 +57,7 @@ Item {
                       labelsColor: "white"
                       color: "white"
                       labelsVisible: true
+                      titleText: "Давление по прибору, ед."
                   }
                 axisX: axisX
                 axisY: axisY
@@ -90,6 +94,42 @@ Item {
                   }
                 axisX: axisX
                 axisY: axisY
+            }
+            ScatterSeries {
+                id: absseries
+                name: "Относительное отклонение"
+                //style: Qt.DotLine
+                //capStyle: Qt.RoundCap
+                color: "lightblue"
+                //width: 2
+                pointLabelsVisible: true
+                pointsVisible: true
+                pointLabelsColor: "lightblue"
+                markerSize: 3
+                ValueAxis {
+                        id: axisXabs
+                        min: 0
+                        max: 500
+                        tickCount: 21
+                        gridVisible: true
+                        color: "lightblue"
+                        labelsVisible: true
+                        minorGridVisible: false
+
+                    }
+                ValueAxis {
+                      id: axisYabs
+                      min: 0
+                      max: chart.maxY
+                      tickCount: 11
+                      gridVisible: true
+                      labelsColor: "lightblue"
+                      color: "lightblue"
+                      labelsVisible: true
+                      titleText: "отклонение в %"
+                  }
+                axisXTop:  axisXabs
+                axisYRight: axisYabs
             }
         }
     }
