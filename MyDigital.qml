@@ -20,7 +20,7 @@ Item {
 //               anchors.margins: 5
 //               anchors.fill: parent
                text: name
-               font.family: "SimSun-ExtB"
+//               font.family: "SimSun-ExtB"
                font.bold: true
                font.pointSize: r.height-r.anchors.margins*2
                horizontalAlignment: Text.AlignHCenter
@@ -29,8 +29,8 @@ Item {
                id:t
                color: "yellow"
 
-               text: (value).toFixed(2)
-               font.family: "Arial"
+               text: value.toFixed(2)
+//               font.family: "Arial"
                font.bold: true
                font.pointSize: r.height-r.anchors.margins*2
                horizontalAlignment: Text.AlignHCenter
