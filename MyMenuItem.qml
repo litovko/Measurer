@@ -6,6 +6,7 @@ Item {
     property string command: "Command"
     property bool pressed: false
     property real fontsize: 10
+    property alias muted: effect.muted
     signal buttonClicked
     SoundEffect {
         id:effect

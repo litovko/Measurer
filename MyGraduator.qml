@@ -119,6 +119,7 @@ Item {
                     fileDialog.visible=true;
                     //gr.state="Загрузить"
                 }
+                muted: !settings.sound
             }
             MyMenuItem {
                 width: 200
@@ -130,6 +131,7 @@ Item {
                     fileDialog.visible=true;
                     //gr.state="Загрузить"
                 }
+                muted: !settings.sound
             }
             MyMenuItem {
                 width: 200
@@ -139,6 +141,7 @@ Item {
                 onButtonClicked: {
                    gr.state=gr.state==="Таблица"?"График":"Таблица" 
                 }
+                muted: !settings.sound
             }
             MyMenuItem {
                 width: 200
@@ -148,6 +151,7 @@ Item {
                 onButtonClicked: {
                    mainrect.state="MAIN"
                 }
+                muted: !settings.sound
             }
         }
         MyTable{

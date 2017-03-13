@@ -44,6 +44,7 @@ ApplicationWindow {
             property alias y: win.y
             property alias width: win.width
             property alias height: win.height
+            property alias sound: settings.sound
     }
 
     function fcommand (cmd) {
@@ -180,6 +181,7 @@ ApplicationWindow {
                 text: "СТАРТ [F2]"
                 command: "START"
                 onButtonClicked: win.fcommand(command)
+                muted: !settings.sound
             }
             MyMenuItem{
                 id: m_cal
@@ -189,6 +191,7 @@ ApplicationWindow {
                 text: "КАЛИБРОВКА '0'[F5]"
                 command: "CALIBRATE"
                 onButtonClicked: win.fcommand(command)
+                muted: !settings.sound
             }
             MyMenuItem{
                 id: m_grad
@@ -197,6 +200,7 @@ ApplicationWindow {
                 text: "ГРАДУИР.[F6]"
                 command: "TABLE"
                 onButtonClicked: win.fcommand(command)
+                muted: !settings.sound
             }
             MyMenuItem{
                 id: m_set
@@ -205,6 +209,7 @@ ApplicationWindow {
                 text: "НАСТРОЙКА [F8]"
                 command: "SETTINGS"
                 onButtonClicked: win.fcommand(command)
+                muted: !settings.sound
             }
         }
         Column {

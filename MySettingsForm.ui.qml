@@ -11,6 +11,7 @@ Item {
     property alias buttonOK: buttonOK
     property alias textField_h: textField_h
     property alias textField_d: textField_d
+    property alias sound: checkBox1.checked
 
     Rectangle {
         id: rectangle1
@@ -192,6 +193,28 @@ Item {
                 leftPadding: 0
                 anchors.rightMargin: 0
                 horizontalAlignment: Text.AlignHCenter
+            }
+
+            CheckBox {
+                id: checkBox1
+                x: 170
+                y: 223
+                checked: false
+            }
+
+            Label {
+                id: label5
+                x: 1
+                y: 230
+                width: 154
+                height: 27
+                color: "#e0e0e0"
+                text: qsTr("Звуки")
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                anchors.leftMargin: 0
+                anchors.left: parent.left
+                font.pointSize: 10
             }
         }
     }
