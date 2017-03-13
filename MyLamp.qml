@@ -23,22 +23,22 @@ Item {
                 color: !error?"yellow":"lightgray"
                 anchors.horizontalCenter: column.horizontalCenter
             }
-            Rectangle {
-                id: tr
-                width: lamp.width
-                height: lamp.height/2
-                anchors.horizontalCenter: column.horizontalCenter
-                color: "transparent"
-                Text {
-                    text: lamp.bottomText;
-                    font.pointSize: lamp.fontSize
-                    //fontSizeMode: Text.Fit
-                    color: !error?"yellow":"lightgray"
-                    horizontalAlignment: Text.AlignHCenter;
-                    verticalAlignment: Text.AlignVCenter;
-                    anchors.fill:  parent
-                }
-            }
+//            Rectangle {
+//                id: tr
+//                width: lamp.width
+//                height: lamp.height/2
+//                anchors.horizontalCenter: column.horizontalCenter
+//                color: "transparent"
+//                Text {
+//                    text: lamp.bottomText;
+//                    font.pointSize: lamp.fontSize
+//                    //fontSizeMode: Text.Fit
+//                    color: !error?"yellow":"lightgray"
+//                    horizontalAlignment: Text.AlignHCenter;
+//                    verticalAlignment: Text.AlignVCenter;
+//                    anchors.fill:  parent
+//                }
+//            }
         }
     }
 }

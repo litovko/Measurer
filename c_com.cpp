@@ -66,6 +66,13 @@ qreal c_com::func(const qreal &x)
     return x*m_b+m_a;
 }
 
+qreal c_com::mantissa(const qreal &x)
+{
+    return floor(log10(x));
+
+
+}
+
 QString c_com::getFilename() const
 {
     return m_filename;
@@ -93,6 +100,7 @@ void c_com::filltableseries()
     qDebug()<<m_tabledata;
     lineseries->clear();
     tableseries->clear();
+    absseries->clear();
     foreach(QString item, qs) {
         QStringList dl=item.split(";");
         if (dl.length()<6) break;
@@ -109,7 +117,8 @@ void c_com::filltableseries()
     //
 
     minx=0;
-    qreal m=10000;
+    qreal m=pow(10,mantissa(maxy)+1);
+    qDebug()<<"m="<<m;
     qreal p=m;
     for(int j=0; j<=10;j++) {
         qDebug()<<"p="<<p<<"maxy="<<maxy;

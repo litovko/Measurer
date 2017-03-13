@@ -204,6 +204,7 @@ private:
     QFile m_file;
     QString m_filename="init.csv";
     qreal func(const qreal &x);
+    qreal mantissa(const qreal &x);
 
 
 };

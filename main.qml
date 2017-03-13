@@ -278,6 +278,13 @@ ApplicationWindow {
             anchors.margins: 10
             height: 40
             lamp: m.isOpen
+            Timer {
+                interval: 1000
+                running: true;
+                repeat: true;
+                onTriggered: status.status_text=Date().toString()
+
+            }
         }
 
         MChart {
@@ -311,11 +318,10 @@ ApplicationWindow {
             anchors.centerIn: parent
             comboBox.model: m.ports //список доступных ком-портов
             buttonCANCEL.onClicked: {
-                visible=false;
+                mainrect.state="MAIN"
             }
             buttonOK.onClicked: {
-                visible=false;
-                print ("locacl="+Qt.locale())
+                mainrect.state="MAIN"
                 m.openSerialPort(comboBox.currentIndex);
                 m.pulley=textField.text;
                 m.impeller_h=textField_h.text
