@@ -22,8 +22,8 @@ Item {
         anchors.topMargin: 0
         gradient: Gradient {
             GradientStop {
-                position: 1
-                color: "#666666"
+                position: 0.997
+                color: "#555555"
             }
 
             GradientStop {
@@ -120,7 +120,7 @@ Item {
                 width: 154
                 height: 27
                 color: "#e0e0e0"
-                text: qsTr("Радиус шкива, мм")
+                text: qsTr("Радиус шкива, см")
                 anchors.leftMargin: 0
                 horizontalAlignment: Text.AlignLeft
                 font.pointSize: 10
@@ -135,7 +135,7 @@ Item {
                 width: 154
                 height: 27
                 color: "#e0e0e0"
-                text: qsTr("Диаметр крыльчатки, мм")
+                text: qsTr("Диаметр крыльчатки, см")
                 font.pointSize: 10
                 anchors.left: parent.left
                 anchors.leftMargin: 0
@@ -169,7 +169,7 @@ Item {
                 width: 154
                 height: 27
                 color: "#e0e0e0"
-                text: qsTr("Высота  крыльчатки, мм")
+                text: qsTr("Высота  крыльчатки, см")
                 font.pointSize: 10
                 anchors.left: parent.left
                 anchors.leftMargin: 0

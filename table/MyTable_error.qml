@@ -4,15 +4,11 @@ import QtQuick.Controls.Styles 1.4
 import "../"
 
 Item {
-    id: mt
+    id: mte
     property int colnumber: 0
     property int rownumber: 0
-    property alias children: datarows.children
-    property real rad: 0
-    property real imp_h: 0
-    property real imp_d: 0
-    property real imp: 1
-    //property string dataset: ""
+
+    property string dataset: ""
     property int maxrow: 7
     function addcolumn(){ //добавляем одну колонку во все строки в хэдер
         //if (!rownumber) return;
@@ -32,15 +28,11 @@ Item {
 
     function addrow(){
         var newObject = Qt.createQmlObject(
-            'MyCellLine {
+            'MyCellLine_error {
                 width: header.width
                 height: 40
-                radius_R: mt.rad
-                imp: mt.imp
-                imp_h: mt.imp_h
-                imp_d: mt.imp_d
             }',datarows, "dynamicRow");
-        newObject.number=datarows.children.length
+
         for (var i=0;i<colnumber; i++) newObject.addcolumn()
         //print(makedatastring())
     }
@@ -64,6 +56,38 @@ Item {
     function cleartable() {
         for(var i=rownumber;i>0; i--) datarows.children[i-1].destroy();
     }
+    function  recalc(d, sr) {
+        var sl=d.split("/");
+        var s=""
+        for (var i=0; i<sl.length;i++ ){
+
+            print (sl[i]);
+            s=s+(sl[i]-sr)+"/"
+        }
+        return s
+    }
+
+    function calculate(str) {
+        var s=str.indexOf("\r",0)
+        var i=0; var j=0
+        while (s>0) {
+            print("rownumber:"+rownumber)
+            if (i > rownumber-1) {addrow()}
+            var sbstr=str.substring(0,s)
+            str=str.substring(s+1,str.length)
+            print("Fillstr:"+sbstr)
+            s=str.indexOf("\r",0);
+            var sl=sbstr.split(";");  //print("sl="+sl)
+                setcell(i,0,sl[0].trim());
+                setcell(i,1,sl[3].trim());
+                setcell(i,2,sl[6].trim());
+                setcell(i,3,recalc(sl[5].trim(),sl[6]));
+//                tbl.setcell(i,3,sl[2].trim());
+//                tbl.setcell(i,6,sl[5].trim());
+            i++
+        }
+    }
+    onDatasetChanged:  calculate(dataset)
 
     Rectangle {
         id: rect
@@ -78,18 +102,18 @@ Item {
             anchors.margins: 5
             anchors.left: parent.left
             anchors.top: parent.top
-            Rectangle {
-                width: 90
-                height: 80
-                color: "transparent"
-                border.color: "transparent"
-                MyMenuItem{
-                  anchors.fill: parent
-                  anchors.margins: 6
-                  text: "Добавить"
-                  onButtonClicked: if(rownumber<maxrow) addrow()
-                }
-            }
+//            Rectangle {
+//                width: 90
+//                height: 80
+//                color: "transparent"
+//                border.color: "transparent"
+//                MyMenuItem{
+//                  anchors.fill: parent
+//                  anchors.margins: 6
+//                  text: "Добавить"
+//                  onButtonClicked: if(rownumber<maxrow) addrow()
+//                }
+//            }
 
             MyHeaderItem {
                 width: 90
@@ -99,37 +123,29 @@ Item {
             MyHeaderItem {
                 width: 90
                 height: 80
-                text: "<p>№</p><p>гирь</p><p></p><p></p>"
-            }
-            MyHeaderItem {
-                width: 90
-                height: 80
-                text: "<p>Вес гирь</p><p>на площадке</p><p>P, гс</p><p></p>"
-            }
-            MyHeaderItem {
-                width: 90
-                height: 80
-                text: "<p>Вр.момент</p><p>М=R*P,</p><p>гс*см</p><p></p>"
-            }
-            MyHeaderItem {
-                width: 90
-                height: 80
                 text: "<p>Сопр.вращ.</p><p>срезу</p><p>гс/см/см</p><p></p>"
             }
-            MyLongHeader {
-                id: lh
-                width: 300
+            MyHeaderItem {
+                width: 90
                 height: 80
-                text1: "Отсчеты по индикатору ("+count+" шт.)"
-                onCountChanged: {
-                    //print("count changed="+count)
-                }
+                text: "<p>Средн. зна-</p><p>ченине</p><p>ед</p><p></p>"
             }
             MyHeaderItem {
                 width: 90
                 height: 80
-                text: "<p>Среднее</p><p>арифм.</p><p>значение</p><p>ед.</p>"
+                text: "<p>Сумма откло-</p><p>нений</p><p>ед</p><p></p>"
             }
+            MyHeaderItem {
+                width: 90
+                height: 80
+                text: "<p>Абсолютная</p><p>погр-ть</p><p>ед</p><p></p>"
+            }
+            MyHeaderItem {
+                width: 90
+                height: 80
+                text: "<p>Относи-</p><p>тельная</p><p>погр-ть</p><p>%</p>"
+            }
+
         } //конец заголовка
         Column {
             id: datarows
@@ -137,7 +153,7 @@ Item {
             anchors.left: parent.left
             anchors.top: header.bottom
             anchors.right: parent.right
-            onChildrenChanged: mt.rownumber=children.length
+            onChildrenChanged: mte.rownumber=children.length
         }
     }
 

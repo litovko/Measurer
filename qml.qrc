@@ -18,5 +18,8 @@
         <file>MyGraduator.qml</file>
         <file>MyChartGrad.qml</file>
         <file>sound/menuitemhover.wav</file>
+        <file>table/MyTable_error.qml</file>
+        <file>table/MyCellLine_error.qml</file>
+        <file>table/MyDataCells_error.qml</file>
     </qresource>
 </RCC>

@@ -4,7 +4,8 @@ import QtCharts 2.0
 Item {
     id: chart
     property string seriesName: "Усилие, ед."
-    property string chartName: "График зависимости показаний датчика от массы грузов"
+    property string chartName: "<p>График зависимости показаний датчика от рассчитанного сопротивления вращ. срезу</p><p></p>"
+
     property alias series: ls
     property alias lineseries: line
     property alias absseries: absseries

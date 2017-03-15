@@ -18,11 +18,11 @@ Item {
         //var str=dataset
         table_rows=tbl.children.length;
         if (table_rows>0) {
-            print("")
+            print("check delay")
             if (!timer.running)timer.start()
             return;
         }
-        var s0=0
+        //var s0=0
         var s=str.indexOf("\r",0)
         var i=0; var j=0
         while (s>0) {
@@ -55,6 +55,10 @@ Item {
         property alias table_columns: gr.table_columns
 
     }
+    onStateChanged: {
+        if (state==="Погрешность") tbl_error.dataset=tbl.getdata()
+    }
+
     FileDialog {
         id: fileDialog
         title: "Укажите имя файла данных таблицы"
@@ -107,7 +111,7 @@ Item {
             anchors.margins: 10
             spacing: 30
             MyMenuItem {
-                width: 200
+                width: 150
                 height: 40
                 text: "Записать таблицу"
                 command: "SAVE"
@@ -122,7 +126,7 @@ Item {
                 muted: !settings.sound
             }
             MyMenuItem {
-                width: 200
+                width: 160
                 height: 40
                 text: "Загрузить таблицу"
                 command: "READ"
@@ -134,7 +138,7 @@ Item {
                 muted: !settings.sound
             }
             MyMenuItem {
-                width: 200
+                width: 160
                 height: 40
                 text: "Таблица/График"
                 command: "ПЕРЕКЛ"
@@ -144,7 +148,17 @@ Item {
                 muted: !settings.sound
             }
             MyMenuItem {
-                width: 200
+                width: 160
+                height: 40
+                text: "Погрешность"
+                command: "ПЕРЕКЛ"
+                onButtonClicked: {
+                   gr.state="Погрешность"
+                }
+                muted: !settings.sound
+            }
+            MyMenuItem {
+                width: 160
                 height: 40
                 text: "Закрыть"
                 command: "ЗАКРЫТЬ"
@@ -183,17 +197,34 @@ Item {
             anchors.left: parent.left
             anchors.bottom: parent.bottom
         }
+        MyTable_error{
+            id: tbl_error
+            height:500
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+
+
+        }
     }
     states: [
         State {
             name: "Таблица"
             PropertyChanges { target: tbl; visible: true; }
-             PropertyChanges { target: chart; visible: false; }
+            PropertyChanges { target: chart; visible: false; }
+            PropertyChanges { target: tbl_error; visible: false; }
         },
         State {
             name: "График"
             PropertyChanges { target: tbl; visible: false; }
-             PropertyChanges { target: chart; visible: true; }
+            PropertyChanges { target: chart; visible: true; }
+            PropertyChanges { target: tbl_error; visible: false; }
+        },
+        State {
+            name: "Погрешность"
+            PropertyChanges { target: tbl; visible: false; }
+            PropertyChanges { target: chart; visible: false; }
+            PropertyChanges { target: tbl_error; visible: true; }
         }
 
     ]
