@@ -50,6 +50,16 @@ Item {
     function getrow(num) {
         return datarows.children[num]
     }
+    function get_prived_error(){
+        var max=0;
+        for (var i=0; i<rownumber;i++) {
+            max=Math.max(getcell(i,7), max)
+        }
+        print ("max="+max);
+        return max;
+
+    }
+
     function getdata() {
         var s=""
 //        s="'Радиус крыльчатки':'"+rad+"';'Высота крыльчатки':'"+imp_h+"';'Диаметр крыльчатки':'"+imp_d+"';'Количество строк':'"+rownumber +"';'Количество колонок':'"+colnumber
@@ -60,6 +70,9 @@ Item {
     }
     function setcell(i,j,val){
         datarows.children[i].datalinerow.children[j].setdata(val)
+    }
+    function getcell(i,j){
+        return datarows.children[i].datalinerow.children[j].getdata()
     }
     function cleartable() {
         for(var i=rownumber;i>0; i--) datarows.children[i-1].destroy();
@@ -121,9 +134,7 @@ Item {
                 width: 300
                 height: 80
                 text1: "Отсчеты по индикатору ("+count+" шт.)"
-                onCountChanged: {
-                    //print("count changed="+count)
-                }
+
             }
             MyHeaderItem {
                 width: 90

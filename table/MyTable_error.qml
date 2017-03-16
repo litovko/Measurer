@@ -10,6 +10,10 @@ Item {
 
     property string dataset: ""
     property int maxrow: 7
+    property real prived_error: 1
+    property real sr_abs: 0
+    property real sr_otn: 0
+    property real sr_priv: 0
     function addcolumn(){ //добавляем одну колонку во все строки в хэдер
         //if (!rownumber) return;
         for(var i=0; i<datarows.children.length;i++) {
@@ -31,10 +35,10 @@ Item {
             'MyCellLine_error {
                 width: header.width
                 height: 40
+                prived_error: mte.prived_error
             }',datarows, "dynamicRow");
 
         for (var i=0;i<colnumber; i++) newObject.addcolumn()
-        //print(makedatastring())
     }
     function delrow(num){
         datarows.children[num].destroy()
@@ -53,41 +57,50 @@ Item {
     function setcell(i,j,val){
         datarows.children[i].datalinerow.children[j].setdata(val)
     }
+    function getcell(i,j){
+        return datarows.children[i].datalinerow.children[j].getdata()
+    }
     function cleartable() {
         for(var i=rownumber;i>0; i--) datarows.children[i-1].destroy();
     }
+    function round10(a,b){
+        return Math.round(Math.abs(a)*b)/b
+    }
+
     function  recalc(d, sr) {
         var sl=d.split("/");
         var s=""
         for (var i=0; i<sl.length;i++ ){
-
-            print (sl[i]);
-            s=s+(sl[i]-sr)+"/"
+            s=s+round10((sl[i]-sr),100)+"/"
         }
-        return s
+
+        return s.substring(0,s.length-1)
     }
 
     function calculate(str) {
         var s=str.indexOf("\r",0)
-        var i=0; var j=0
+        var i=0; var j=0;
+        sr_abs=0; sr_otn=0; sr_priv=0
         while (s>0) {
-            print("rownumber:"+rownumber)
-            if (i > rownumber-1) {addrow()}
+            if (i > (rownumber-1)) { addrow()}
             var sbstr=str.substring(0,s)
             str=str.substring(s+1,str.length)
-            print("Fillstr:"+sbstr)
             s=str.indexOf("\r",0);
-            var sl=sbstr.split(";");  //print("sl="+sl)
-                setcell(i,0,sl[0].trim());
-                setcell(i,1,sl[3].trim());
-                setcell(i,2,sl[6].trim());
-                setcell(i,3,recalc(sl[5].trim(),sl[6]));
-//                tbl.setcell(i,3,sl[2].trim());
-//                tbl.setcell(i,6,sl[5].trim());
+            var sl=sbstr.split(";");
+            setcell(i,0,sl[0].trim());
+            setcell(i,1,sl[4].trim());
+            setcell(i,2,sl[6].trim());
+            setcell(i,3,recalc(sl[5].trim(),sl[6]));
+            sr_abs+=getcell(i,5)*1.0; print ("s:"+sr_abs+"i:"+i)
             i++
         }
+        sr_abs=sr_abs/i
     }
-    onDatasetChanged:  calculate(dataset)
+    onDatasetChanged:  {
+        prived_error=tbl.get_prived_error();
+        cleartable()
+        calculate(dataset)
+    }
 
     Rectangle {
         id: rect
@@ -102,18 +115,7 @@ Item {
             anchors.margins: 5
             anchors.left: parent.left
             anchors.top: parent.top
-//            Rectangle {
-//                width: 90
-//                height: 80
-//                color: "transparent"
-//                border.color: "transparent"
-//                MyMenuItem{
-//                  anchors.fill: parent
-//                  anchors.margins: 6
-//                  text: "Добавить"
-//                  onButtonClicked: if(rownumber<maxrow) addrow()
-//                }
-//            }
+
 
             MyHeaderItem {
                 width: 90
@@ -130,12 +132,19 @@ Item {
                 height: 80
                 text: "<p>Средн. зна-</p><p>ченине</p><p>ед</p><p></p>"
             }
+            MyLongHeader {
+                id: lhe
+                width: 300
+                height: 80
+                text1: "Отклонение от среднего"
+            }
             MyHeaderItem {
                 width: 90
                 height: 80
                 text: "<p>Сумма откло-</p><p>нений</p><p>ед</p><p></p>"
             }
             MyHeaderItem {
+                id: a
                 width: 90
                 height: 80
                 text: "<p>Абсолютная</p><p>погр-ть</p><p>ед</p><p></p>"
@@ -144,6 +153,11 @@ Item {
                 width: 90
                 height: 80
                 text: "<p>Относи-</p><p>тельная</p><p>погр-ть</p><p>%</p>"
+            }
+            MyHeaderItem {
+                width: 90
+                height: 80
+                text: "<p>Приве-</p><p>денная</p><p>погр-ть</p><p>%</p>"
             }
 
         } //конец заголовка
@@ -155,6 +169,31 @@ Item {
             anchors.right: parent.right
             onChildrenChanged: mte.rownumber=children.length
         }
+        Row {
+            x: a.x+5
+            anchors.margins: 5
+            anchors.top: datarows.bottom
+            height: 30
+            MyCellInt {
+                width: 90
+                celltype: 0
+                celldata: sr_abs
+                height: parent.height
+            }
+            MyCellInt {
+                width: 90
+                celltype: 0
+                celldata: sr_otn
+                height: parent.height
+            }
+            MyCellInt {
+                width: 90
+                celltype: 0
+                celldata: sr_priv
+                height: parent.height
+            }
+        }
+
     }
 
 }

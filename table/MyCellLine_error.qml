@@ -6,7 +6,7 @@ Item {
     id: dl
     property int celwidth: 90
     property real longcelwidth: 300
-    //property string dataset: ""
+    property real prived_error: 300
     property alias weightname: w.celldata
     property alias weight: mm.celldata
     property alias datalinerow: dataline
@@ -37,22 +37,22 @@ Item {
 
         MyCellInt {// номер строки таблицы
 
-            celltype: 4
+            celltype: 0
             width: celwidth
             height: dataline.height
         }
         MyCellInt {// сопротивление
             id: w
-            celltype: 3
+            celltype: 0
             width: celwidth
             height: dataline.height
         }
         MyCellInt { //среднее значение
             id: mm
-            celltype: 3
+            celltype: 0
             width: celwidth
             height: dataline.height
-            onCelldataChanged: dl.update()
+
         }
         MyDataCells_error {
             id: d
@@ -62,25 +62,34 @@ Item {
 
         MyCellInt { //сумма отклонений
             id: serr
-            celltype: 3
+            celltype: 0
             width: celwidth
             height: dataline.height
             onCelldataChanged: dl.update()
+            celldata: d.summa.toFixed(2)
         }
         MyCellInt { //абсолютная погрешность
             id: aerr
-            celltype: 3
+            celltype: 0
             width: celwidth
             height: dataline.height
-            onCelldataChanged: dl.update()
+            celldata: (d.summa/d.count).toFixed(2)
         }
         MyCellInt { //относительная погрешность
             id: rerr
-            celltype: 3
+            celltype: 0
             width: celwidth
             height: dataline.height
-            onCelldataChanged: dl.update()
+            celldata: ((d.summa/d.count)/mm.getdata()*100).toFixed(2)
         }
+        MyCellInt { //приведенная погрешность
+            id: perr
+            celltype: 0
+            width: celwidth
+            height: dataline.height
+            celldata: ((d.summa/d.count)*100/dl.prived_error).toFixed(2)
+        }
+
 
 
     }

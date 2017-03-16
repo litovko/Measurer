@@ -8,7 +8,7 @@ Item {
     property int count: 0
 
     function addcolumn() { //создаем объект заголовка
-        print("header data column add->"+(count+1))
+//        print("header data column add->"+(count+1))
         var newObject = Qt.createQmlObject(
                 'MyHeaderItem{
                 text: "'+(r.children.length+1)+'"
@@ -16,7 +16,7 @@ Item {
                 height: 20}',r, "dynamicColumn");
     }
     function delcolumn(num) {
-      print("del->"+num);
+//      print("del->"+num);
       r.children[num].destroy();
       for(var i=0;i<r.children.length;i++) r.children[i].text=i;
     }

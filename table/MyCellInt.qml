@@ -34,7 +34,7 @@ Item {
             color: "#e7ee90"
 
             font.pointSize: fontsize
-            text: c.celldata
+            text: Math.round(c.celldata*100)/100
             font.bold: true
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter

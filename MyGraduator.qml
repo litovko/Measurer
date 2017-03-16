@@ -55,9 +55,7 @@ Item {
         property alias table_columns: gr.table_columns
 
     }
-    onStateChanged: {
-        if (state==="Погрешность") tbl_error.dataset=tbl.getdata()
-    }
+
 
     FileDialog {
         id: fileDialog
@@ -225,6 +223,7 @@ Item {
             PropertyChanges { target: tbl; visible: false; }
             PropertyChanges { target: chart; visible: false; }
             PropertyChanges { target: tbl_error; visible: true; }
+            PropertyChanges { target: tbl_error; dataset: tbl.getdata()}
         }
 
     ]

@@ -5,6 +5,8 @@ Item {
     property int count:0
     property real average: 0
     property string celldata: ""
+    property real summa:0
+
     signal changed
     function addcolumn(dat) {
         var newObject = Qt.createQmlObject(
@@ -25,7 +27,6 @@ Item {
         var  s=0.0
         for(var i=0;i<dataset.children.length;i++) {
             s+=dataset.children[i].celldata*1.0;
-            //print("i="+i+" v="+dataset.children[i].celldata+" s="+s)
         }
         return (s/dataset.children.length).toFixed(2)
     }
@@ -37,22 +38,18 @@ Item {
         return s.substring(0,s.length-1)
     }
     function setdata(d) {
-            print(" Setdata:"+d)
         var s0=0
-
         var ds=d.split("/"); //print("ds:"+ds); //print("min:"+Math.min(dataset.children.length, ds.length))
-
-        for(var i=0; i<Math.min(dataset.children.length, ds.length); i++) {
-            print (dataset.children[i]);
-            dataset.children[i].setdata(ds[i]);
+        summa=0;
+        for(var i=0; i<ds.length; i++) {
+            if (dataset.children[i]===undefined) addcolumn(ds[i])
+            else dataset.children[i].setdata(ds[i]);
+            summa=summa+ds[i]*1.0;
         }
         changed()
+        while (lhe.count<i) lhe.addcolumn()
+        while (lhe.count>i) lhe.delcolumn()
     }
-
-//    onCountChanged: {
-//        print("Data cell count changed="+count)
-//        for(var i=0;i<dataset.children.length;i++) print("i:"+i+"="+dataset.children[i].celldata);
-//    }
     Rectangle {
         anchors.fill: parent
         border.color: "lightblue"
