@@ -91,10 +91,14 @@ Item {
             setcell(i,1,sl[4].trim());
             setcell(i,2,sl[6].trim());
             setcell(i,3,recalc(sl[5].trim(),sl[6]));
-            sr_abs+=getcell(i,5)*1.0; print ("s:"+sr_abs+"i:"+i)
+            sr_abs+=getcell(i,5)*1.0;
+            sr_otn+=getcell(i,6)*1.0;
+            sr_priv+=getcell(i,7)*1.0;
             i++
         }
-        sr_abs=sr_abs/i
+        sr_abs/=i
+        sr_otn/=i
+        sr_priv/=i
     }
     onDatasetChanged:  {
         prived_error=tbl.get_prived_error();
