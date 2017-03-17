@@ -148,10 +148,10 @@ Item {
             MyMenuItem {
                 width: 160
                 height: 40
-                text: "Погрешность"
+                text: "Погр./Дел."
                 command: "ПЕРЕКЛ"
                 onButtonClicked: {
-                   gr.state="Погрешность"
+                   gr.state=gr.state==="Погрешность"?"Деления":"Погрешность"
                 }
                 muted: !settings.sound
             }
@@ -224,8 +224,14 @@ Item {
             PropertyChanges { target: chart; visible: false; }
             PropertyChanges { target: tbl_error; visible: true; }
             PropertyChanges { target: tbl_error; dataset: tbl.getdata()}
+        },
+        State {
+            name: "Деления"
+            PropertyChanges { target: tbl; visible: false; }
+            PropertyChanges { target: chart; visible: false; }
+            PropertyChanges { target: tbl_error; visible: false; }
+            PropertyChanges { target: tbl_error; dataset: tbl.getdata()}
         }
-
     ]
 
 }

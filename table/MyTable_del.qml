@@ -14,10 +14,6 @@ Item {
     property real sr_abs: 0
     property real sr_otn: 0
     property real sr_priv: 0
-    property real sum_tau: 0
-    property real sum_s1: 0
-    property real sum_s2: 0
-    property real k_b: 0
     function addcolumn(){ //добавляем одну колонку во все строки в хэдер
         //if (!rownumber) return;
         for(var i=0; i<datarows.children.length;i++) {
@@ -36,7 +32,7 @@ Item {
 
     function addrow(){
         var newObject = Qt.createQmlObject(
-            'MyCellLine_error {
+            'MyCellLine_del {
                 width: header.width
                 height: 40
                 prived_error: mte.prived_error
@@ -84,7 +80,6 @@ Item {
     function calculate(str) {
         var s=str.indexOf("\r",0)
         var i=0; var j=0;
-        var v;
         sr_abs=0; sr_otn=0; sr_priv=0
         while (s>0) {
             if (i > (rownumber-1)) { addrow()}
@@ -99,9 +94,6 @@ Item {
             sr_abs+=getcell(i,5)*1.0;
             sr_otn+=getcell(i,6)*1.0;
             sr_priv+=getcell(i,7)*1.0;
-            v=getcell(i,2);
-            sum_tau+=v;
-            s1
             i++
         }
         sr_abs/=i
@@ -143,12 +135,6 @@ Item {
                 width: 90
                 height: 80
                 text: "<p>Средн. зна-</p><p>ченине</p><p>ед</p><p></p>"
-            }
-            MyLongHeader {
-                id: lhe
-                width: 300
-                height: 80
-                text1: "Отклонение от среднего"
             }
             MyHeaderItem {
                 width: 90
