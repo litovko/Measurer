@@ -83,9 +83,9 @@ Item {
 
     function calculate(str) {
         var s=str.indexOf("\r",0)
-        var i=0; var j=0;
-        var v;
-        sr_abs=0; sr_otn=0; sr_priv=0
+        var i=0;
+        var j=0;
+        sr_abs=sr_otn=sr_priv=sum_s1=sum_s2=sum_tau=0
         while (s>0) {
             if (i > (rownumber-1)) { addrow()}
             var sbstr=str.substring(0,s)
@@ -97,16 +97,33 @@ Item {
             setcell(i,2,sl[6].trim());
             setcell(i,3,recalc(sl[5].trim(),sl[6]));
             sr_abs+=getcell(i,5)*1.0;
+
             sr_otn+=getcell(i,6)*1.0;
+
             sr_priv+=getcell(i,7)*1.0;
-            v=getcell(i,2);
+            var v=getcell(i,1)*1.0;  // сопр. вр. срезу
+            var k=getcell(i,2)*1.0; // средн значение по прибору в ед.
+            print ("v="+v+" k="+k+"k*k="+k*k)
             sum_tau+=v;
-            s1
+            sum_s1+=(v*k)
+            sum_s2+=(v*v)
             i++
         }
         sr_abs/=i
         sr_otn/=i
         sr_priv/=i
+        k_b=sum_s1/sum_s2
+        print("n="+i+" s1:"+sum_s1+" s2:"+sum_s2+" sum_tau:"+sum_tau + " k_b:"+ k_b)
+        var sum=0
+        for (j=0; j<i;j++) {
+            sum+=Math.pow(k_b*getcell(j,1)*1.0-getcell(j,1)*1.0,2);
+            print("sum="+sum)
+        }
+        var m=Math.pow(sum/(i-1),0.5)
+        print ("by="+m)
+        print ("i*sum_s2:"+i*sum_s2+"sum_tau*sum_tau:"+sum_tau*sum_tau)
+        var bb=m*Math.pow(i/(i*sum_s2-sum_tau*sum_tau),0.5)
+        print("bb="+bb)
     }
     onDatasetChanged:  {
         prived_error=tbl.get_prived_error();
