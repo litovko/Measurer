@@ -103,7 +103,7 @@ Item {
             sr_priv+=getcell(i,7)*1.0;
             var v=getcell(i,1)*1.0;  // сопр. вр. срезу
             var k=getcell(i,2)*1.0; // средн значение по прибору в ед.
-            print ("v="+v+" k="+k+"k*k="+k*k)
+//            print ("v="+v+" k="+k+" k*k="+k*k + "k/v"+k/v)
             sum_tau+=v;
             sum_s1+=(v*k)
             sum_s2+=(v*v)
@@ -113,15 +113,15 @@ Item {
         sr_otn/=i
         sr_priv/=i
         k_b=sum_s1/sum_s2
-        print("n="+i+" s1:"+sum_s1+" s2:"+sum_s2+" sum_tau:"+sum_tau + " k_b:"+ k_b)
+//        print("n="+i+" s1:"+sum_s1+" s2:"+sum_s2+" sum_tau:"+sum_tau + " k_b:"+ k_b)
         var sum=0
         for (j=0; j<i;j++) {
-            sum+=Math.pow(k_b*getcell(j,1)*1.0-getcell(j,1)*1.0,2);
-            print("sum="+sum)
+            sum+=Math.pow(k_b*getcell(j,1)*1.0-getcell(j,2)*1.0,2);
+            //print("rv="+k_b*getcell(j,1)+"sum="+sum)
         }
         var m=Math.pow(sum/(i-1),0.5)
         print ("by="+m)
-        print ("i*sum_s2:"+i*sum_s2+"sum_tau*sum_tau:"+sum_tau*sum_tau)
+//        print ("i*sum_s2:"+i*sum_s2+"sum_tau*sum_tau:"+sum_tau*sum_tau)
         var bb=m*Math.pow(i/(i*sum_s2-sum_tau*sum_tau),0.5)
         print("bb="+bb)
     }
