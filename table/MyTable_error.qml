@@ -18,6 +18,7 @@ Item {
     property real sum_s1: 0
     property real sum_s2: 0
     property real k_b: 0
+    property real k_bb: 0
     function addcolumn(){ //добавляем одну колонку во все строки в хэдер
         //if (!rownumber) return;
         for(var i=0; i<datarows.children.length;i++) {
@@ -112,8 +113,9 @@ Item {
         sr_abs/=i
         sr_otn/=i
         sr_priv/=i
+//        print(" k_b:"+ k_b)
         k_b=sum_s1/sum_s2
-//        print("n="+i+" s1:"+sum_s1+" s2:"+sum_s2+" sum_tau:"+sum_tau + " k_b:"+ k_b)
+        print("n="+i+" s1:"+sum_s1+" s2:"+sum_s2+" sum_tau:"+sum_tau + " k_b:"+ k_b)
         var sum=0
         for (j=0; j<i;j++) {
             sum+=Math.pow(k_b*getcell(j,1)*1.0-getcell(j,2)*1.0,2);
@@ -122,8 +124,8 @@ Item {
         var m=Math.pow(sum/(i-1),0.5)
         print ("by="+m)
 //        print ("i*sum_s2:"+i*sum_s2+"sum_tau*sum_tau:"+sum_tau*sum_tau)
-        var bb=m*Math.pow(i/(i*sum_s2-sum_tau*sum_tau),0.5)
-        print("bb="+bb)
+        k_bb=m*Math.pow(i/(i*sum_s2-sum_tau*sum_tau),0.5)
+        print("bb="+k_bb)
     }
     onDatasetChanged:  {
         prived_error=tbl.get_prived_error();
@@ -168,12 +170,13 @@ Item {
                 text1: "Отклонение от среднего"
             }
             MyHeaderItem {
+                id: a
                 width: 90
                 height: 80
                 text: "<p>Сумма откло-</p><p>нений</p><p>ед</p><p></p>"
             }
             MyHeaderItem {
-                id: a
+
                 width: 90
                 height: 80
                 text: "<p>Абсолютная</p><p>погр-ть</p><p>ед</p><p></p>"
@@ -199,10 +202,22 @@ Item {
             onChildrenChanged: mte.rownumber=children.length
         }
         Row {
+            id: rsred
             x: a.x+5
             anchors.margins: 5
             anchors.top: datarows.bottom
             height: 30
+            Text {
+                width: 90
+                color: "#e7ee90"
+                verticalAlignment: Text.AlignVCenter
+                font.pointSize: 9
+                //horizontalAlignment: Text.AlignHCenter
+                font.bold: true
+
+                text: "Средн. арифм."
+                height: parent.height
+            }
             MyCellInt {
                 width: 90
                 celltype: 0
@@ -222,6 +237,69 @@ Item {
                 height: parent.height
             }
         }
+        Rectangle {
+            height: 30
+            width: 300
+            color: "transparent"
+            border.color: "transparent"
+            anchors.margins: 5
+            anchors.top: rsred.bottom
+            anchors.left: parent.left
+            Row {
+                anchors.fill: parent
+                Text {
+                   font.pointSize: 9
+                   font.bold: true
+                   anchors.bottom: parent.bottom
+                   color: "#e7ee90"
+                   text: "B"
+                }
+                Text {
+                   font.pointSize: 7
+                   anchors.bottom: parent.bottom
+                   color: "#e7ee90"
+                   text: "ист"
+                }
+                Text {
+                   font.pointSize: 9
+                   font.bold: true
+                   anchors.bottom: parent.bottom
+                   color: "#e7ee90"
+                   text: "="+k_b.toFixed(2)+"\u00B1"+(k_bb*2.01).toFixed(2)+ " при n="+rownumber+ " и "
+                }
+                Text {
+                   font.pointSize: 9
+                   font.bold: true
+                   anchors.bottom: parent.bottom
+                   color: "#e7ee90"
+                   text: "a"
+                   font.family: "GreekC_IV50"
+                }
+                Text {
+                   font.pointSize: 9
+                   font.bold: true
+                   anchors.bottom: parent.bottom
+                   color: "#e7ee90"
+                   text: "=0.95 t"
+                }
+                Text {
+                   font.pointSize: 7
+                   anchors.bottom: parent.bottom
+                   color: "#e7ee90"
+                   text: "a"
+                }
+                Text {
+                   font.pointSize: 9
+                   font.bold: true
+                   anchors.bottom: parent.bottom
+                   color: "#e7ee90"
+                   text: "=2.01"
+                }
+            }
+        }
+
+
+
 
     }
 
