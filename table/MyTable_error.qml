@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import "../"
+import "../js/statistics.js" as Statistics
 
 Item {
     id: mte
@@ -19,6 +20,7 @@ Item {
     property real sum_s2: 0
     property real k_b: 0
     property real k_bb: 0
+    property real k_stud:0
     function addcolumn(){ //добавляем одну колонку во все строки в хэдер
         //if (!rownumber) return;
         for(var i=0; i<datarows.children.length;i++) {
@@ -113,7 +115,7 @@ Item {
         sr_abs/=i
         sr_otn/=i
         sr_priv/=i
-//        print(" k_b:"+ k_b)
+        k_stud=Statistics.aStudentT(i-2,0.1)  //alpha 0.95 K=i-2
         k_b=sum_s1/sum_s2
         print("n="+i+" s1:"+sum_s1+" s2:"+sum_s2+" sum_tau:"+sum_tau + " k_b:"+ k_b)
         var sum=0
@@ -124,8 +126,10 @@ Item {
         var m=Math.pow(sum/(i-1),0.5)
         print ("by="+m)
 //        print ("i*sum_s2:"+i*sum_s2+"sum_tau*sum_tau:"+sum_tau*sum_tau)
-        k_bb=m*Math.pow(i/(i*sum_s2-sum_tau*sum_tau),0.5)
+        k_bb=m*Math.pow(i/(i*sum_s2-sum_tau*sum_tau),0.5)*k_stud
         print("bb="+k_bb)
+
+        print("Ta="+k_stud.toFixed(3))
     }
     onDatasetChanged:  {
         prived_error=tbl.get_prived_error();
@@ -265,7 +269,7 @@ Item {
                    font.bold: true
                    anchors.bottom: parent.bottom
                    color: "#e7ee90"
-                   text: "="+k_b.toFixed(2)+"\u00B1"+(k_bb*2.01).toFixed(2)+ " при n="+rownumber+ " и "
+                   text: "="+k_b.toFixed(2)+"\u00B1"+k_bb.toFixed(2)+ " при n="+rownumber+ " и "
                 }
                 Text {
                    font.pointSize: 9
@@ -293,14 +297,12 @@ Item {
                    font.bold: true
                    anchors.bottom: parent.bottom
                    color: "#e7ee90"
-                   text: "=2.01"
+                   text: "="+k_stud.toFixed(3)
                 }
             }
         }
-
-
-
-
     }
+
+
 
 }

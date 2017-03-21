@@ -23,5 +23,6 @@
         <file>table/MyDataCells_error.qml</file>
         <file>table/MyTable_del.qml</file>
         <file>table/MyCellLine_del.qml</file>
+        <file>js/statistics.js</file>
     </qresource>
 </RCC>

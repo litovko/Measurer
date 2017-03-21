@@ -13,6 +13,7 @@ Item {
     property int table_columns: 0
     property alias chart: chart
     state: "Таблица"
+
     function filltable(str)
     {
         //var str=dataset
