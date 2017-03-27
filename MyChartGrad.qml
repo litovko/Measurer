@@ -13,6 +13,12 @@ Item {
     function addpoint(p) {
         ls.append(p)
     }
+    function pr(url){
+        var stat=chart.grabToImage(function(result) {
+            result.saveToFile(url);
+        });
+    }
+
     Rectangle {
         border.color: "gray"
         radius:  20

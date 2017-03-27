@@ -1,4 +1,4 @@
-QT += qml quick serialport charts multimedia
+QT += qml quick serialport charts multimedia printsupport
 
 CONFIG += c++11 console
 

@@ -159,6 +159,17 @@ Item {
             MyMenuItem {
                 width: 160
                 height: 40
+                text: "Отчет"
+                command: "ОТЧЕТ"
+                onButtonClicked: {
+                   chart.pr("filename.png")
+                   m.makeDoc()
+                }
+                muted: !settings.sound
+            }
+            MyMenuItem {
+                width: 160
+                height: 40
                 text: "Закрыть"
                 command: "ЗАКРЫТЬ"
                 onButtonClicked: {

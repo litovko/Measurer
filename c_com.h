@@ -7,6 +7,7 @@
 #include <QString>
 #include "c_mstat.h"
 #include <QFile>
+#include <QTextDocument>
 
 #define NUM_POINTS 200
 using namespace QtCharts;
@@ -153,6 +154,7 @@ public slots:
     void calcImpeller();
 
     Q_INVOKABLE void fill();
+    Q_INVOKABLE void makeDoc();
     void filltableseries();
     void writefile();
     QString readfile();
@@ -186,7 +188,7 @@ private:
     // коэффициенты апроксимирующей прямой.
     qreal m_a=0;
     qreal m_b=1;
-
+    qreal func(const qreal &x); //функция вычисления аппроксимированных значений
     //==
     qint32 m_count=0;
     qint32 m_tarecount=0;
@@ -196,15 +198,20 @@ private:
     QXYSeries *tableseries=0;
     QXYSeries *lineseries=0;
     QXYSeries *absseries=0;
+    qreal mantissa(const qreal &x);
     QString m_tabledata="";
     int current=0;
 
     void saveSettings();
     void readSettings();
-    QFile m_file;
+    QFile m_file; // данные в файле
     QString m_filename="init.csv";
-    qreal func(const qreal &x);
-    qreal mantissa(const qreal &x);
+    //====== ОТЧЕТ ======
+
+    QTextDocument m_doc;
+
+
+
 
 
 };

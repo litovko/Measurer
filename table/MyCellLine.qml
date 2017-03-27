@@ -53,6 +53,7 @@ Item {
 
               text: "Удалить"
               onButtonClicked: dl.destroy()
+              muted: true // звука нет будет для этих кнопок
             }
         }
 
