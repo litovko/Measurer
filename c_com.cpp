@@ -19,6 +19,7 @@ static void addTable(QTextCursor& cursor, const int &ncol, const int &nrow)
     tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_Solid);
     tableFormat.setCellPadding(1);
     tableFormat.setCellSpacing(0);
+
     //tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 40));
 //    tableFormat.setAlignment(Qt::AlignLeft);
     QTextTable* textTable = cursor.insertTable( rows + 5,
@@ -27,8 +28,9 @@ static void addTable(QTextCursor& cursor, const int &ncol, const int &nrow)
     QTextCharFormat tableHeaderFormat;
     tableHeaderFormat.setBackground( QColor( "#DADADA" ) );
 
+
     QStringList headers;
-    headers << "Порядковый\n №\n измерений" << "№\n гирь" << "Вес гирь\nна площадке\n P, г/с" <<"Вр.момент\nМ=R*P,\nгс*см" <<"Сопр.вращ.\nсрезу\nгс/см/см"<<"Данные с датчика, ед."<<">Среднее\nарифм.\nзначение\nед."<<"77"<<"88";
+    headers << "Порядковый\n №\n измерений" << "№\n гирь" << "Вес гирь\nна площадке\n P, г/с" <<"Вр.момент\nМ=R*P,\nгс*см" <<"Сопр.вращ.\nсрезу\nгс/см/см"<<"Данные с датчика, ед."<<"Среднее\nарифм.\nзначение\nед."<<"77"<<"88";
     for( int column = 0; column < columns; column++ ) {
         QTextTableCell cell;
         qDebug()<<"column="<<column;
@@ -37,6 +39,10 @@ static void addTable(QTextCursor& cursor, const int &ncol, const int &nrow)
             Q_ASSERT( cell.isValid() );
             cell.setFormat( tableHeaderFormat );
             QTextCursor cellCursor = cell.firstCursorPosition();
+            QTextBlockFormat blockFormat;
+            blockFormat.setAlignment(Qt::AlignHCenter);
+            cellCursor.insertBlock(blockFormat);
+
             if (column<5) cellCursor.insertText( headers[column] );
             else cellCursor.insertText( headers[6] );
         }
@@ -45,9 +51,11 @@ static void addTable(QTextCursor& cursor, const int &ncol, const int &nrow)
             Q_ASSERT( cell.isValid() );
             cell.setFormat( tableHeaderFormat );
             QTextCursor cellCursor = cell.firstCursorPosition();
-            cellCursor.insertText(QString::number(column));
+            cellCursor.blockFormat().setAlignment(Qt::AlignHCenter);
+            cellCursor.insertText(QString::number(column-4));
         }
     }
+
     int row = 0+3;
     for( int column = 0; column < columns; column++ ) {
         QTextTableCell cell = textTable->cellAt( row + 1, column );
@@ -137,11 +145,11 @@ void c_com::makeDoc()
     QTextCharFormat charFormat;
     charFormat.setFont(normalFont);
     m_doc.setDefaultFont(headerFont);
+    blockFormat.setAlignment(Qt::AlignHCenter);
     cursor.insertText("РЕЗУЛЬТАТЫ КАЛИБРОВКИ");
     cursor.insertBlock(blockFormat,charFormat);
     cursor.insertText(" 1");
-    cursor.insertBlock();
-
+    cursor.insertBlock(blockFormat,charFormat);
     cursor.insertText("Таблица калибровки прибора");
     addTable(cursor,7,1);
 
