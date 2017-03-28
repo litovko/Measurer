@@ -3,78 +3,10 @@
 #include <QtSerialPort/QSerialPortInfo>
 #include <QSettings>
 #include <QtGlobal>
-#include <QPrinter>
-#include <QTextDocumentWriter>
-
-static void addTable(QTextCursor& cursor, const int &ncol, const int &nrow)
-{
-    const int columns = 6+ncol;
-    const int rows = 3+nrow;
-
-    QTextTableFormat tableFormat;
-
-    tableFormat.setHeaderRowCount( 1 );
-    tableFormat.setAlignment(Qt::AlignCenter);
-
-    tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_Solid);
-    tableFormat.setCellPadding(1);
-    tableFormat.setCellSpacing(0);
-
-    //tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 40));
-//    tableFormat.setAlignment(Qt::AlignLeft);
-    QTextTable* textTable = cursor.insertTable( rows + 5,
-                                                columns,
-                                                tableFormat );
-    QTextCharFormat tableHeaderFormat;
-    tableHeaderFormat.setBackground( QColor( "#DADADA" ) );
+#include "c_reporter.h"
 
 
-    QStringList headers;
-    headers << "Порядковый\n №\n измерений" << "№\n гирь" << "Вес гирь\nна площадке\n P, г/с" <<"Вр.момент\nМ=R*P,\nгс*см" <<"Сопр.вращ.\nсрезу\nгс/см/см"<<"Данные с датчика, ед."<<"Среднее\nарифм.\nзначение\nед."<<"77"<<"88";
-    for( int column = 0; column < columns; column++ ) {
-        QTextTableCell cell;
-        qDebug()<<"column="<<column;
-        if (column<5||column==columns-1) {
-            cell = textTable->cellAt( 0, column );
-            Q_ASSERT( cell.isValid() );
-            cell.setFormat( tableHeaderFormat );
-            QTextCursor cellCursor = cell.firstCursorPosition();
-            QTextBlockFormat blockFormat;
-            blockFormat.setAlignment(Qt::AlignHCenter);
-            cellCursor.insertBlock(blockFormat);
 
-            if (column<5) cellCursor.insertText( headers[column] );
-            else cellCursor.insertText( headers[6] );
-        }
-        else {
-            cell = textTable->cellAt( 2, column );
-            Q_ASSERT( cell.isValid() );
-            cell.setFormat( tableHeaderFormat );
-            QTextCursor cellCursor = cell.firstCursorPosition();
-            cellCursor.blockFormat().setAlignment(Qt::AlignHCenter);
-            cellCursor.insertText(QString::number(column-4));
-        }
-    }
-
-    int row = 0+3;
-    for( int column = 0; column < columns; column++ ) {
-        QTextTableCell cell = textTable->cellAt( row + 1, column );
-
-        Q_ASSERT( cell.isValid() );
-        QTextCursor cellCursor = cell.firstCursorPosition();
-        const QString cellText = QString( "A 220.00" );
-        cellCursor.insertText( cellText );
-    }
-    textTable->mergeCells(0,0,3,1);
-    textTable->mergeCells(0,1,3,1);
-    textTable->mergeCells(0,2,3,1);
-    textTable->mergeCells(0,3,3,1);
-    textTable->mergeCells(0,4,3,1);
-    textTable->mergeCells(0,5,1,ncol);
-    textTable->mergeCells(1,5,1,ncol);
-    textTable->mergeCells(0,5+ncol,3,1);
-    cursor.movePosition( QTextCursor::End );
-}
 c_com::c_com(QObject *parent) : QObject(parent), series(NULL)
 {
     m_serial = new QSerialPort(this);
@@ -135,32 +67,10 @@ void c_com::readSettings()
 
 void c_com::makeDoc()
 {
+    c_reporter *rep=new c_reporter(this);
+    rep->createGraduatorReport("report.doc");
+    rep->deleteLater();
 
-    QTextCursor cursor(&m_doc);
-
-    QFont headerFont("Times", 14, QFont::Bold);
-
-    QFont normalFont("Times", 12, QFont::Normal);
-    QTextBlockFormat blockFormat;
-    QTextCharFormat charFormat;
-    charFormat.setFont(normalFont);
-    m_doc.setDefaultFont(headerFont);
-    blockFormat.setAlignment(Qt::AlignHCenter);
-    cursor.insertText("РЕЗУЛЬТАТЫ КАЛИБРОВКИ");
-    cursor.insertBlock(blockFormat,charFormat);
-    cursor.insertText(" 1");
-    cursor.insertBlock(blockFormat,charFormat);
-    cursor.insertText("Таблица калибровки прибора");
-    addTable(cursor,7,1);
-
-    QPrinter printer(QPrinter::HighResolution);
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setOutputFileName("file.pdf");
-    m_doc.print(&printer);
-    QTextDocumentWriter odfWritter("filedoc.doc");
-    qDebug()<<odfWritter.supportedDocumentFormats();
-    odfWritter.setFormat("html");
-    odfWritter.write(&m_doc);
 }
 
 qreal c_com::func(const qreal &x)

@@ -4,7 +4,8 @@ CONFIG += c++11 console
 
 SOURCES += main.cpp \
     c_com.cpp \
-    c_mstat.cpp
+    c_mstat.cpp \
+    c_reporter.cpp
 
 RESOURCES += qml.qrc
 
@@ -18,6 +19,7 @@ DESTDIR = d:/dest
 
 HEADERS += \
     c_com.h \
-    c_mstat.h
+    c_mstat.h \
+    c_reporter.h
 
 DISTFILES +=

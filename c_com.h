@@ -7,7 +7,8 @@
 #include <QString>
 #include "c_mstat.h"
 #include <QFile>
-#include <QTextDocument>
+
+
 
 #define NUM_POINTS 200
 using namespace QtCharts;
@@ -206,9 +207,7 @@ private:
     void readSettings();
     QFile m_file; // данные в файле
     QString m_filename="init.csv";
-    //====== ОТЧЕТ ======
 
-    QTextDocument m_doc;
 
 
 
