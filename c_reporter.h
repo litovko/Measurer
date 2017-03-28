@@ -15,6 +15,7 @@ public:
 signals:
 
 public slots:
+    void setData(QString data);
 private:
     QTextDocument m_doc;
     QTextCharFormat tableCellFormat; //формат ячейки таблицы
@@ -23,6 +24,11 @@ private:
     QTextCharFormat charFormat; //переменная для создания блока с нужным фонтом
 
     void addGraduatorTable(QTextCursor& cursor, const int &ncol, const int &nrow);
+
+    int m_rows=0;
+    int m_columns=0;
+    QString m_data_izm="";
+    QString m_array[15][15];
 
 };
 

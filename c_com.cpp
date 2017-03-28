@@ -68,8 +68,10 @@ void c_com::readSettings()
 void c_com::makeDoc()
 {
     c_reporter *rep=new c_reporter(this);
+    rep->setData(m_tabledata);
     rep->createGraduatorReport("report.doc");
     rep->deleteLater();
+
 
 }
 
