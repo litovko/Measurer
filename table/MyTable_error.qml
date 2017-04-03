@@ -150,8 +150,6 @@ Item {
             anchors.margins: 5
             anchors.left: parent.left
             anchors.top: parent.top
-
-
             MyHeaderItem {
                 width: 90
                 height: 80
@@ -195,7 +193,6 @@ Item {
                 height: 80
                 text: "<p>Приве-</p><p>денная</p><p>погр-ть</p><p>%</p>"
             }
-
         } //конец заголовка
         Column {
             id: datarows
@@ -302,7 +299,4 @@ Item {
             }
         }
     }
-
-
-
 }

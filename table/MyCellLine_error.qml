@@ -23,7 +23,7 @@ Item {
     }
     function getdata() {
         var s=""
-        for (var i=1; i<dataline.children.length; i++)
+        for (var i=0; i<dataline.children.length; i++)
         s=s+dataline.children[i].celldata+";"
         //print ("MyCellLine.getdata="+s)
         return s

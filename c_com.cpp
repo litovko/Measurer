@@ -68,7 +68,10 @@ void c_com::readSettings()
 void c_com::makeDoc()
 {
     c_reporter *rep=new c_reporter(this);
+    qDebug()<<"m_tabledataerror:"<<m_tabledataerror;
     rep->setData(m_tabledata);
+    rep->setDataError(m_tabledataerror);
+    rep->setValues(m_values);
     rep->createGraduatorReport("report.doc");
     rep->deleteLater();
 
@@ -85,6 +88,26 @@ qreal c_com::mantissa(const qreal &x)
     return floor(log10(x));
 
 
+}
+
+QString c_com::getValues() const
+{
+    return m_values;
+}
+
+void c_com::setValues(const QString &values)
+{
+    m_values = values;
+}
+
+QString c_com::getTabledataerror() const
+{
+    return m_tabledataerror;
+}
+
+void c_com::setTabledataerror(const QString &tabledataerror)
+{
+    m_tabledataerror = tabledataerror;
 }
 
 QString c_com::getFilename() const

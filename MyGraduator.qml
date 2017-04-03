@@ -8,7 +8,7 @@ Item {
 
     property alias maxrow : tbl.maxrow
     property string dataset: ""
-
+    property string dataset_error: ""
     property int table_rows: 0
     property int table_columns: 0
     property alias chart: chart
@@ -41,6 +41,8 @@ Item {
             i++
         }
         gr.dataset=tbl.getdata();
+
+
     }
     Timer {
         id: timer
@@ -152,7 +154,7 @@ Item {
                 text: "Погр./Дел."
                 command: "ПЕРЕКЛ"
                 onButtonClicked: {
-                   gr.state=gr.state==="Погрешность"?"Деления":"Погрешность"
+                   gr.state="Погрешность"
                 }
                 muted: !settings.sound
             }
@@ -163,6 +165,14 @@ Item {
                 command: "ОТЧЕТ"
                 onButtonClicked: {
                    chart.pr("filename.png")
+                   tbl_error.dataset=tbl.getdata()
+
+                   gr.dataset_error=tbl_error.getdata();
+                   print ("TABLE_ERROR_DATA:"+gr.dataset_error);
+                   m.tabledataerror=gr.dataset_error;
+                   m.values="Среднеарифметическая величина абсолютной погрешности, ед.:  "+tbl_error.sr_abs.toFixed(2)
+                   m.values=m.values+ "\nСреднеарифметическая величина относительной погрешности, %:  "+tbl_error.sr_otn.toFixed(2)
+                   m.values=m.values+ "\nСреднеарифметическая величина приведенной погрешности, %:  "+tbl_error.sr_priv.toFixed(2)
                    m.makeDoc()
                 }
                 muted: !settings.sound
@@ -213,8 +223,6 @@ Item {
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.bottom: parent.bottom
-
-
         }
     }
     states: [

@@ -35,7 +35,9 @@ class c_com : public QObject
     Q_PROPERTY(QXYSeries *tablseries READ getTableseries WRITE setTableseries NOTIFY tableseriesChanged) // серия данных для графика
     Q_PROPERTY(QXYSeries *lineseries READ getLineseries WRITE setLineseries NOTIFY lineseriesChanged) // серия данных для линейного графика
     Q_PROPERTY(QXYSeries *absseries READ getAbsseries WRITE setAbsseries NOTIFY absseriesChanged) // серия данных для линейного графика
-    Q_PROPERTY(QString tabledata READ getTabledata WRITE setTabledata NOTIFY tabledataChanged) // имя порта
+    Q_PROPERTY(QString tabledata READ getTabledata WRITE setTabledata NOTIFY tabledataChanged) // данные из таблицы измерений
+    Q_PROPERTY(QString tabledataerror READ getTabledataerror WRITE setTabledataerror NOTIFY tabledataerrorChanged) // данные из таблицы погрешностей
+    Q_PROPERTY(QString values READ getValues WRITE setValues NOTIFY valuesChanged) // данные - результаты рассчетов
     //===========================
     Q_PROPERTY(QString filename READ getFilename() WRITE setFilename NOTIFY filenameChanged) // имя порта
 public:
@@ -116,6 +118,12 @@ public:
     QXYSeries *getAbsseries() const;
     void setAbsseries(QXYSeries *value);
 
+    QString getTabledataerror() const;
+    void setTabledataerror(const QString &tabledataerror);
+
+    QString getValues() const;
+    void setValues(const QString &values);
+
 signals:
     void nameChanged();
     void dataChanged();
@@ -139,6 +147,8 @@ signals:
     void absseriesChanged();
     void stopTare();
     void tabledataChanged();
+    void tabledataerrorChanged();
+    void valuesChanged();
     void filenameChanged();
 
 public slots:
@@ -201,18 +211,14 @@ private:
     QXYSeries *absseries=0;
     qreal mantissa(const qreal &x);
     QString m_tabledata="";
+    QString m_tabledataerror="";
+    QString m_values="";
     int current=0;
 
     void saveSettings();
     void readSettings();
     QFile m_file; // данные в файле
     QString m_filename="init.csv";
-
-
-
-
-
-
 };
 
 #endif // C_COM_H
