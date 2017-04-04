@@ -31,7 +31,7 @@ private:
     void addValues(QTextCursor& cursor);
     void addChart(QTextCursor& cursor);
     void addChart2(QTextCursor& cursor);
-
+    void addError(QTextCursor& cursor);
     int m_rows=0;
     int m_columns=0;
     QString m_data_izm=""; //данные таблицы измерений

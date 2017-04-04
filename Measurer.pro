@@ -9,6 +9,10 @@ SOURCES += main.cpp \
 
 RESOURCES += qml.qrc
 
+DISTFILES += \
+    skin/hycoicon.ico
+RC_ICONS = skin/hycoicon.ico
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 DESTDIR = d:/dest

@@ -122,6 +122,32 @@ void c_reporter::addChart(QTextCursor &cursor)
     imageFormat.setName( Uri.toString() );
     cursor.insertImage(imageFormat);
 }
+
+void c_reporter::addError(QTextCursor &cursor)
+{
+    QTextCharFormat tcf=charFormat;
+    tcf.setFontItalic(true);
+    blockFormat.setAlignment(Qt::AlignLeft);
+    cursor.insertBlock(blockFormat,charFormat);
+    cursor.insertText("\nРезультаты расчета цены деления\n ");
+    cursor.insertText("B",tcf);
+    tcf.setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    cursor.insertText("ист",tcf);
+    tcf.setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.insertText("=",tcf);
+    cursor.insertText("0.67\u00B10.01\n при n=5",tcf);
+    tcf.setFontFamily("GreekC_IV50");
+
+    cursor.insertText(" и a=0.95 ",tcf);
+    tcf=charFormat;
+    cursor.insertText("t",tcf);
+    tcf.setFontFamily("GreekC_IV50");tcf.setFontItalic(true);
+    tcf.setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    cursor.insertText("a",tcf);
+    tcf.setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.insertText("=2.45",tcf);
+    //font.family: "GreekC_IV50"
+}
 void c_reporter::createGraduatorReport(QString fname)
 {
     QTextCursor cursor(&m_doc);
@@ -145,6 +171,7 @@ void c_reporter::createGraduatorReport(QString fname)
     cursor.insertText("Результаты расчета погрешности");
     addErrorTable(cursor,m_columns,m_rows);
     addValues(cursor);
+    addError(cursor);
     addChart(cursor);
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
