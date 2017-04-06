@@ -101,6 +101,7 @@ Item {
                   anchors.margins: 6
                   text: "Добавить"
                   onButtonClicked: if(rownumber<maxrow) addrow()
+                  muted: true
                 }
             }
 

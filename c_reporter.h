@@ -12,12 +12,15 @@ public:
     explicit c_reporter(QObject *parent = 0);
     void createGraduatorReport(QString fname);
     void setCell(QTextTable* textTable,int row, int col, QString str);
+    void setParams(const QString &params);
+
 signals:
 
 public slots:
-    void setData(QString data);
-    void setDataError(QString data);
-    void setValues(QString data);
+    void setData(QString &data);
+    void setDataError(QString &data);
+    void setValues(QString &data);
+
 
 private:
     QTextDocument m_doc;
@@ -37,6 +40,7 @@ private:
     QString m_data_izm=""; //данные таблицы измерений
     QString m_data_err=""; //данные таблицы погрешностей
     QString m_values="";
+    QString m_params="";
     QString m_array[15][15];
     QString m_array_err[15][15];
 

@@ -72,6 +72,7 @@ void c_com::makeDoc()
     rep->setData(m_tabledata);
     rep->setDataError(m_tabledataerror);
     rep->setValues(m_values);
+    rep->setParams(m_parameters);
     rep->createGraduatorReport("report.doc");
     rep->deleteLater();
 
@@ -88,6 +89,16 @@ qreal c_com::mantissa(const qreal &x)
     return floor(log10(x));
 
 
+}
+
+QString c_com::getParameters() const
+{
+    return m_parameters;
+}
+
+void c_com::setParameters(const QString &parameters)
+{
+    m_parameters = parameters;
 }
 
 QString c_com::getValues() const

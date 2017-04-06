@@ -38,6 +38,7 @@ class c_com : public QObject
     Q_PROPERTY(QString tabledata READ getTabledata WRITE setTabledata NOTIFY tabledataChanged) // данные из таблицы измерений
     Q_PROPERTY(QString tabledataerror READ getTabledataerror WRITE setTabledataerror NOTIFY tabledataerrorChanged) // данные из таблицы погрешностей
     Q_PROPERTY(QString values READ getValues WRITE setValues NOTIFY valuesChanged) // данные - результаты рассчетов
+    Q_PROPERTY(QString parameters READ getParameters WRITE setParameters NOTIFY parametersChanged) // данные - результаты рассчетов
     //===========================
     Q_PROPERTY(QString filename READ getFilename() WRITE setFilename NOTIFY filenameChanged) // имя порта
 public:
@@ -124,6 +125,9 @@ public:
     QString getValues() const;
     void setValues(const QString &values);
 
+    QString getParameters() const;
+    void setParameters(const QString &parameters);
+
 signals:
     void nameChanged();
     void dataChanged();
@@ -149,6 +153,7 @@ signals:
     void tabledataChanged();
     void tabledataerrorChanged();
     void valuesChanged();
+    void parametersChanged();
     void filenameChanged();
 
 public slots:
@@ -213,6 +218,7 @@ private:
     QString m_tabledata="";
     QString m_tabledataerror="";
     QString m_values="";
+    QString m_parameters="";
     int current=0;
 
     void saveSettings();

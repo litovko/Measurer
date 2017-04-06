@@ -126,6 +126,7 @@ void c_reporter::addChart(QTextCursor &cursor)
 void c_reporter::addError(QTextCursor &cursor)
 {
     QTextCharFormat tcf=charFormat;
+    QStringList l=m_params.split(';');
     tcf.setFontItalic(true);
     blockFormat.setAlignment(Qt::AlignLeft);
     cursor.insertBlock(blockFormat,charFormat);
@@ -135,7 +136,7 @@ void c_reporter::addError(QTextCursor &cursor)
     cursor.insertText("ист",tcf);
     tcf.setVerticalAlignment(QTextCharFormat::AlignNormal);
     cursor.insertText("=",tcf);
-    cursor.insertText("0.67\u00B10.01\n при n=5",tcf);
+    cursor.insertText(l.at(2)+"\u00B1"+l.at(3)+",  при n="+QString::number(m_rows),tcf);
     tcf.setFontFamily("GreekC_IV50");
 
     cursor.insertText(" и a=0.95 ",tcf);
@@ -145,8 +146,13 @@ void c_reporter::addError(QTextCursor &cursor)
     tcf.setVerticalAlignment(QTextCharFormat::AlignSubScript);
     cursor.insertText("a",tcf);
     tcf.setVerticalAlignment(QTextCharFormat::AlignNormal);
-    cursor.insertText("=2.45",tcf);
+    cursor.insertText("="+l.at(1),tcf);
     //font.family: "GreekC_IV50"
+}
+
+void c_reporter::setParams(const QString &params)
+{
+    m_params = params;
 }
 void c_reporter::createGraduatorReport(QString fname)
 {
@@ -193,7 +199,7 @@ void c_reporter::setCell(QTextTable *textTable, int row, int col, QString str)
     cellCursor.insertText(str);
 }
 
-void c_reporter::setData(QString data)
+void c_reporter::setData(QString &data)
 {
 //    m_rows=rows;
 //    m_columns=columns;
@@ -228,7 +234,7 @@ void c_reporter::setData(QString data)
     }
 }
 
-void c_reporter::setDataError(QString data)
+void c_reporter::setDataError(QString &data)
 {
     m_data_err=data;
     qDebug()<<"reporter error data:"<<m_data_err;
@@ -263,7 +269,7 @@ void c_reporter::setDataError(QString data)
     }
 }
 
-void c_reporter::setValues(QString data)
+void c_reporter::setValues(QString &data)
 {
     m_values=data;
 }

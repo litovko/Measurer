@@ -3,6 +3,7 @@ import "./table"
 import QtQuick.Dialogs 1.2
 import Qt.labs.settings 1.0
 
+//import QtQuick.Controls 2.0
 Item {
     id: gr
 
@@ -12,6 +13,7 @@ Item {
     property int table_rows: 0
     property int table_columns: 0
     property alias chart: chart
+    property real student: 1
     state: "Таблица"
 
     function filltable(str)
@@ -56,7 +58,7 @@ Item {
         property alias dataset: gr.dataset
         property alias table_rows: gr.table_rows
         property alias table_columns: gr.table_columns
-
+        property alias student: gr.student
     }
 
 
@@ -106,7 +108,9 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             color: "lightgray"
         }
+
         Row {
+            id: firstrow
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: tt.bottom
             anchors.margins: 10
@@ -148,6 +152,24 @@ Item {
                 }
                 muted: !settings.sound
             }
+
+
+            MyMenuItem {
+                width: 160
+                height: 40
+                text: "Закрыть"
+                command: "ЗАКРЫТЬ"
+                onButtonClicked: {
+                   mainrect.state="MAIN"
+                }
+                muted: !settings.sound
+            }
+        }
+        Row {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: firstrow.bottom
+            anchors.margins: 10
+            spacing: 30
             MyMenuItem {
                 width: 160
                 height: 40
@@ -173,17 +195,17 @@ Item {
                    m.values="Среднеарифметическая величина абсолютной погрешности, ед.:  "+tbl_error.sr_abs.toFixed(2)
                    m.values=m.values+ "\nСреднеарифметическая величина относительной погрешности, %:  "+tbl_error.sr_otn.toFixed(2)
                    m.values=m.values+ "\nСреднеарифметическая величина приведенной погрешности, %:  "+tbl_error.sr_priv.toFixed(2)
+                   m.parameters=gr.table_rows+";"+gr.student+";"+tbl_error.k_b.toFixed(3)+";"+ tbl_error.k_bb.toFixed(3)
                    m.makeDoc()
                 }
                 muted: !settings.sound
-            }
-            MyMenuItem {
+            }MyMenuItem {
                 width: 160
                 height: 40
-                text: "Закрыть"
-                command: "ЗАКРЫТЬ"
+                text: "к-т Стьюдента"
+                command: "СТЬЮДЕНТ"
                 onButtonClicked: {
-                   mainrect.state="MAIN"
+                   gr.state="Стьюдент"
                 }
                 muted: !settings.sound
             }
@@ -223,20 +245,36 @@ Item {
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.bottom: parent.bottom
+            k_stud: gr.student
         }
     }
+
+
+    MyStudentDialog {
+        id: student
+        visible: false
+        anchors.centerIn: parent
+        onBtnOK:  {gr.state="Таблица"; gr.student=input_value}
+        onBtnCancel: gr.state="Таблица"
+        input_value: gr.student
+        num_rows: tbl.rownumber
+    }
+
+
     states: [
         State {
             name: "Таблица"
             PropertyChanges { target: tbl; visible: true; }
             PropertyChanges { target: chart; visible: false; }
             PropertyChanges { target: tbl_error; visible: false; }
+            PropertyChanges { target: student; visible: false}
         },
         State {
             name: "График"
             PropertyChanges { target: tbl; visible: false; }
             PropertyChanges { target: chart; visible: true; }
             PropertyChanges { target: tbl_error; visible: false; }
+            PropertyChanges { target: student; visible: false}
         },
         State {
             name: "Погрешность"
@@ -244,6 +282,7 @@ Item {
             PropertyChanges { target: chart; visible: false; }
             PropertyChanges { target: tbl_error; visible: true; }
             PropertyChanges { target: tbl_error; dataset: tbl.getdata()}
+            PropertyChanges { target: student; visible: false}
         },
         State {
             name: "Деления"
@@ -251,6 +290,14 @@ Item {
             PropertyChanges { target: chart; visible: false; }
             PropertyChanges { target: tbl_error; visible: false; }
             PropertyChanges { target: tbl_error; dataset: tbl.getdata()}
+            PropertyChanges { target: student; visible: false}
+        },
+        State {
+            name: "Стьюдент"
+            PropertyChanges { target: tbl; visible: false; }
+            PropertyChanges { target: chart; visible: false; }
+            PropertyChanges { target: tbl_error; visible: false; }
+            PropertyChanges { target: student; visible: true}
         }
     ]
 

@@ -24,5 +24,6 @@
         <file>table/MyTable_del.qml</file>
         <file>table/MyCellLine_del.qml</file>
         <file>js/statistics.js</file>
+        <file>MyStudentDialog.qml</file>
     </qresource>
 </RCC>

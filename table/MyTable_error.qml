@@ -115,7 +115,7 @@ Item {
         sr_abs/=i
         sr_otn/=i
         sr_priv/=i
-        k_stud=Statistics.aStudentT(i-2,0.1)  //alpha 0.95 K=i-2
+        //k_stud=Statistics.aStudentT(i-2,0.1)  //alpha 0.95 K=i-2
         k_b=sum_s1/sum_s2
         print("n="+i+" s1:"+sum_s1+" s2:"+sum_s2+" sum_tau:"+sum_tau + " k_b:"+ k_b)
         var sum=0

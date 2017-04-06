@@ -345,7 +345,7 @@ ApplicationWindow {
         }
         MyGraduator {
             id: grad
-            height: 600
+            height: 800
             width: 1000
             anchors.centerIn: parent
         }
